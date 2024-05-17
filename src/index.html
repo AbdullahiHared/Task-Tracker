@@ -3,26 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Task Tracker</title>
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/reset.css">
 </head>
-<link rel="stylesheet" href="./src/css/reset.css">
-<link rel="stylesheet" href="./src/css/index.css">
 <body>
 <header>
     <img src="./images/trackIcon.svg" alt="track logo">
+    <div class="logoText">
+        <span>Task</span>
+        <span>Tracker</span>
+    </div>
 </header>
 <main>
-    <section class="task-types">
-    </section>
-    <section class="task-area">
-        <div class="task-lists">
-            <img src="./images/all-icon.svg" alt="all-icon">
-            <span class="allTasks">All</span>
-            <img src="./images/star.svg" alt="starred icon">
-            <span class="starredTasks">Starred</span>
-            <img src="./images/todayIcon.svg" alt="todayIcon">
-            <span class="todayTasks">Today</span>
-            <img src="./images/weekIcon.svg" alt="weekIcon">
-            <span class="weekTasks">Week</span>
+    <section class="taskFilters">
+        <div class="taskLists">
+            <div class="allTasks">
+                <img src="./images/all-icon.svg" alt="all-icon">
+                <span class="task">All</span>
+            </div>
+            <div class="starredTasks">
+                <img src="./images/star.svg" alt="starred icon">
+                <span class="task">Starred</span>
+            </div>
+            <div class="todayTasks">
+                <img src="./images/todayIcon.svg" alt="todayIcon">
+                <span class="task">Today</span>
+            </div>
+            <div class="weekTasks">
+                <img src="./images/weekIcon.svg" alt="weekIcon">
+                <span class="task">Week</span>
+            </div>
         </div>
         <article class="user-projects">
             <div class="projects-guide">
@@ -31,7 +42,9 @@
             </div>
         </article>
     </section>
+    <section class="taskTypes">
+    </section>
 </main>
-<script src="./src/js/index.js"></script>
+<script src="./scripts/index.js"></script>
 </body>
 </html>
