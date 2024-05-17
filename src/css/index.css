@@ -1,0 +1,47 @@
+/* body */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color:black;
+  box-sizing: border-box;
+}
+
+/* header */
+header {
+  padding: 10px 0;
+
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align:center;
+}
+.logoText {
+  color: #A020F0;
+  margin-right:78%;
+  word-spacing: 10px;
+  font-weight:bolder;
+  font-size: 1.5em;
+  font-family: 'Adobe Devanagari', serif
+}
+
+.logoText > span:first-child {
+  color: #f5f5f5;
+}
+
+header > img {
+  margin-right:80%;
+    width:80px;
+}
+
+/* main */
+main {
+  display: flex;
+  justify-content: space-between;
+  align-items:start;
+  flex-direction:row;
+}
+
+/* .taskArea */
+
+
