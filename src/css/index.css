@@ -12,14 +12,13 @@ header {
     padding: 10px 0;
 
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     text-align: center;
 }
 
 .logoText {
     color: #A020F0;
-    margin-right: 78%;
+    margin-right: 70%;
+
     word-spacing: 10px;
     font-weight: bolder;
     font-size: 1.5em;
@@ -31,18 +30,95 @@ header {
 }
 
 header > img {
-    margin-right: 80%;
-    width: 80px;
+    width: 70px;
+    margin-right: 72%;
 }
 
 /* main */
 main {
+    width: 100vw;
     display: flex;
-    justify-content: space-between;
-    align-items: start;
+    align-items: flex-start;
     flex-direction: row;
+    margin-top: 20px;
+    margin-left: 30px;
+    height: 100vh;
 }
 
 /* .taskArea */
+.taskFilters {
+    width: 20%;
+    height: 80vh;
+    margin: 0 10px 0 80px;
+    padding: 10px;
+    background-color: #1d1d1e;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10%;
+}
+
+.taskTypes {
+    width: 60%;
+    height: 80vh;
+    margin: 0 10px 0 10px;
+    padding: 10px;
+    background-color: #1d1d1e;
+    border-radius: 10px;
+}
+
+.taskLists {
+    display: flex;
+    flex-direction: column;
+
+    color: #c2bdbd;
+    font-weight: bold;
+}
+
+.task {
+    text-align: center;
+}
+
+/* border-radius */
+.taskTypes, .taskFilters {
+    border-radius: 20px;
+    font-family: Roboto, sans-serif;
+}
+
+/* .tasks */
+.todayTasks, .weekTasks, .allTasks, .starredTasks {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.todayTasks > img, .weekTasks > img, .allTasks > img, .starredTasks > img {
+    width: 40px;
+}
+
+.taskLists > h2, .projects-guide > h2 {
+    color: #a660d2;
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-left: 15px;
+}
+
+.projects-guide {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20%;
+}
+
+.addProject {
+    color: #c2bdbd;
+    font-weight: inherit;
+    font-size: 4rem;
+}
+
+
 
 
