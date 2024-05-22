@@ -12,7 +12,7 @@ taskFilters.forEach((task) => {
             task.classList.remove('active');
         })
         task.classList.add('active');
-        taskTypes.innerHTML = task.textContent + " Tasks";
+        taskTypes.innerHTML = task.textContent;
         taskTypes.classList.add('activeTask');
     })
 })
