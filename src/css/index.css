@@ -1,11 +1,13 @@
-@import url(https://fonts.gstatic.com/s/raleway/v34/1Ptug8zYS_SKggPNyCkIT5lu.woff2);
+@import url('https://fonts.googleapis.com/css2?family=Danfo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Danfo&family=Shadows+Into+Light&display=swap');
 /* body */
 body {
-    font-family: 'Raleway', Magneto, Arial, sans-serif;
-    font-style:normal;
+    font-family: "Shadows Into Light", cursive;
+    font-optical-sizing: auto;
+    font-variation-settings: "ELSH" 0;
     margin: 0;
     padding: 0;
-    background-color: black;
+    background-color: rgba(2, 5, 5, 0.94);
     box-sizing: border-box;
 }
 
@@ -18,16 +20,20 @@ header {
 }
 
 .logoText {
-    color: #a660d2;
+    color: #c2ac54;
     margin-right: 70%;
 
     word-spacing: 12px;
-    font-weight: bolder;
     font-size: 1.2em;
+    font-family: "Danfo", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:"ELSH" 0;
 }
 
 .logoText > span:first-child {
-    color: #f5f5f5;
+    color: #667d85;
 }
 
 header > img {
@@ -73,7 +79,7 @@ main {
     display: flex;
     flex-direction: column;
 
-    color: #c2bdbd;
+    color: #667d85;
     font-weight: bold;
 }
 
@@ -94,6 +100,7 @@ main {
     gap: 10px;
     height:2rem;
     padding: 10px;
+    position: relative;
 }
 
 .todayTasks > img, .weekTasks > img, .allTasks > img, .starredTasks > img {
@@ -101,10 +108,15 @@ main {
 }
 
 .taskLists > h2, .projects-guide > h2 {
-    color: #a660d2;
-    font-size: 1.3em;
+    color: rgba(48, 163, 119, 0.89);
+    font-size: 1.5em;
     font-weight: bold;
+    font-style: normal;
     margin-left: 15px;
+}
+
+.taskLists > h2 {
+    margin-bottom:20px;
 }
 
 .projects-guide {
@@ -121,9 +133,10 @@ main {
 }
 
 .active {
-    background: #4f4c4c;
+    background: rgba(59, 255, 189, 0.2);
+    color: #c2ac54;
     border-radius: 10px;
-    height:20px;
+    height: 2rem; /* Change this from 20px to 2rem */
 }
 
 /*buttons*/
@@ -145,9 +158,8 @@ button {
 }
 
 button:hover {
-    background: #f5f5f5;
-    color: #a660d2;
-
+    background: #2b2121;
+    color: #1d1d1e;
     transition: .9s ease;
 }
 
@@ -165,11 +177,12 @@ button:hover {
     margin-left: 15px;
 }
 
-.todayTasks:hover, .weekTasks:hover, .allTasks:hover, .starredTasks:hover {
-    background: #2d2b2b;
-    cursor: pointer;
-    border-radius:10px;
+.activeIcon {
+    fill: #a660d2;
 }
+
+
+
 
 
 
