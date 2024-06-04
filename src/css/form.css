@@ -1,0 +1,55 @@
+.form-popup {
+    display: none; /* Hidden by default */
+    position: fixed;
+    width: 50%;
+    top: 50%;
+    left: 65%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+
+    border-radius:10px;
+}
+
+.form-popup.show {
+    display: block; /* Shown when the 'show' class is added */
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container input,
+.form-container textarea {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.submitBtn {
+    background-color: #d23f1e;
+    color: #a49e9d;
+    border-radius: 4px;
+    cursor: pointer;
+
+    position:absolute;
+    top:90%;
+    left:46.2%;
+    border: 1px solid #ccc;
+}
+
+.cancelBtn {
+    background-color: rgb(29, 29, 30);
+    color: #e3d8d8;
+    border-radius: 4px;
+    cursor: pointer;
+
+    position:absolute;
+    top:90%;
+    left:30%;
+    border: 1px solid #ccc;
+}
