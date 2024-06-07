@@ -91,10 +91,32 @@ export function formPopup() {
     formPopup.classList.toggle('show');
 }
 
+function createTaskElement(task, index) {
+    const taskItem = document.createElement('div');
+    taskItem.classList.add('taskItem');
+
+    const title = document.createElement('h3');
+    const taskDescription = document.createElement('h5');
+    const taskTime = document.createElement('p');
+
+    title.textContent = task.title;
+    taskDescription.textContent = task.description;
+    taskTime.textContent = task.time;
+
+    taskItem.appendChild(title);
+    taskItem.appendChild(taskDescription);
+    taskItem.appendChild(taskTime);
+
+    const taskModifiers = createTaskModifiers(task, index);
+    taskItem.appendChild(taskModifiers);
+
+    return taskItem;
+}
+
+
 function displayTasks(arr) {
-    const taskTypes = document.querySelector('.taskTypes');
     const todayTasksContainer = document.querySelector('.taskTypes');
-    todayTasksContainer.innerHTML = "";
+    todayTasksContainer.textContent = "";
 
     const taskHeader = document.createElement('h2');
     taskHeader.textContent = "Today";
@@ -105,26 +127,8 @@ function displayTasks(arr) {
     todayTasksContainer.appendChild(todayTasksDiv);
 
     arr.forEach((task, index) => {
-        const taskItem = document.createElement('div');
-        taskItem.classList.add('taskItem');
-
-        const title = document.createElement('h3');
-        const taskDescription = document.createElement('h5');
-        const taskDate = document.createElement('p');
-        const addTaskBtn = document.createElement('button');
-        addTaskBtn.classList.add('taskAddBtn');
-        addTaskBtn.textContent = "Add Task";
-
-        addTaskBtn.addEventListener('click', formPopup);
-        title.textContent = task.title;
-        taskDescription.textContent = task.description;
-        taskDate.textContent = task.time;
-
-        taskItem.appendChild(title);
-        taskItem.appendChild(taskDescription);
-        taskItem.appendChild(taskDate);
-        todayTasksDiv.appendChild(taskItem);
-        taskTypes.appendChild(addTaskBtn);
+        const taskElement = createTaskElement(task, index);
+        todayTasksDiv.appendChild(taskElement);
     });
 }
 
