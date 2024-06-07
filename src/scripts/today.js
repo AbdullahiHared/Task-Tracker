@@ -19,22 +19,19 @@ function removeTaskFromToday(arr, index) {
 
 export function taskBtnAdder() {
     const taskTypes = document.querySelector('.taskTypes');
-    const todayTasksContainer = document.querySelector('.todayTasks');
 
-    todayTasksContainer.addEventListener('click', () => {
-        taskTypes.textContent = "";
-        const taskHeader = document.createElement('h2');
-        taskHeader.textContent = "Today";
-        taskTypes.appendChild(taskHeader);
+    taskTypes.textContent = "";
+    const taskHeader = document.createElement('h2');
+    taskHeader.textContent = "Today";
+    taskTypes.appendChild(taskHeader);
 
-        const taskAddBtn = document.createElement('button');
-        taskAddBtn.textContent = "Add Task";
-        taskAddBtn.classList.add('taskAddBtn');
-        taskTypes.appendChild(taskAddBtn);
+    const taskAddBtn = document.createElement('button');
+    taskAddBtn.textContent = "Add Task";
+    taskAddBtn.classList.add('taskAddBtn');
+    taskTypes.appendChild(taskAddBtn);
 
-        // Add an event listener to the button
-        taskAddBtn.addEventListener('click', formPopup);
-    });
+    // Add an event listener to the button
+    taskAddBtn.addEventListener('click', formPopup);
 }
 
 export function formPopup() {
@@ -58,15 +55,12 @@ export function formPopup() {
         descriptionInput.setAttribute('id', 'taskDescription');
         formContainer.appendChild(descriptionInput);
 
-
         const inputDate = document.createElement('input');
         inputDate.setAttribute('type', 'date');
         inputDate.setAttribute('placeholder', 'Task Date');
         inputDate.setAttribute('id', 'taskDate');
         formContainer.appendChild(inputDate);
         inputDate.setAttribute('required', true);
-        const taskTypes = document.querySelector('.taskTypes');
-        taskTypes.appendChild(formPopup);
 
         const submitBtn = document.createElement('button');
         submitBtn.textContent = "Add task";
@@ -80,21 +74,25 @@ export function formPopup() {
 
         cancelBtn.addEventListener('click', () => {
             formPopup.classList.toggle('show');
-            descriptionInput.textContent = "";
-            inputTitle.textContent = "";
+            inputTitle.value = "";
+            descriptionInput.value = "";
+            inputDate.value = "";
         });
 
-        // Add an event listener to the form to call the addUserTask function when the form is submitted
         formPopup.addEventListener('submit', (event) => {
             event.preventDefault();
             addUserTask();
         });
+
+        const taskTypes = document.querySelector('.taskTypes');
+        taskTypes.appendChild(formPopup);
     }
 
     formPopup.classList.toggle('show');
 }
 
 function displayTasks(arr) {
+    const taskTypes = document.querySelector('.taskTypes');
     const todayTasksContainer = document.querySelector('.taskTypes');
     todayTasksContainer.innerHTML = "";
 
@@ -102,23 +100,31 @@ function displayTasks(arr) {
     taskHeader.textContent = "Today";
     todayTasksContainer.appendChild(taskHeader);
 
-    const todayTasks = document.createElement('div');
-    todayTasks.classList.add('todayTasks');
-    todayTasksContainer.appendChild(todayTasks);
+    const todayTasksDiv = document.createElement('div');
+    todayTasksDiv.classList.add('todayTasks');
+    todayTasksContainer.appendChild(todayTasksDiv);
 
     arr.forEach((task, index) => {
-        const title = document.createElement('h3');
-        const taskDescription = document.createElement('p');
-        const taskDate = document.createElement('p');
-        const taskStar = document.createElement('p');
+        const taskItem = document.createElement('div');
+        taskItem.classList.add('taskItem');
 
+        const title = document.createElement('h3');
+        const taskDescription = document.createElement('h5');
+        const taskDate = document.createElement('p');
+        const addTaskBtn = document.createElement('button');
+        addTaskBtn.classList.add('taskAddBtn');
+        addTaskBtn.textContent = "Add Task";
+
+        addTaskBtn.addEventListener('click', formPopup);
         title.textContent = task.title;
         taskDescription.textContent = task.description;
         taskDate.textContent = task.time;
 
-        todayTasks.appendChild(title);
-        todayTasks.appendChild(taskDescription);
-        todayTasks.appendChild(taskDate);
+        taskItem.appendChild(title);
+        taskItem.appendChild(taskDescription);
+        taskItem.appendChild(taskDate);
+        todayTasksDiv.appendChild(taskItem);
+        taskTypes.appendChild(addTaskBtn);
     });
 }
 
@@ -130,6 +136,5 @@ export function addUserTask() {
     const userTask = new Task(taskTitle, taskDate, taskDescription, false);
     addTaskToToday(todayTasks, userTask);
     displayTasks(todayTasks); // Display the tasks after adding a new one
-    taskBtnAdder(); // Re-add the button to add a task
     console.log(todayTasks);
 }
