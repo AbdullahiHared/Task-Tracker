@@ -99,9 +99,9 @@ function createTaskElement(task, index) {
     const taskDescription = document.createElement('h5');
     const taskTime = document.createElement('p');
 
-    title.textContent = task.title;
-    taskDescription.textContent = task.description;
-    taskTime.textContent = task.time;
+    title.textContent = "Title : " + task.title;
+    taskDescription.textContent = "Description: " + task.description;
+    taskTime.textContent = "Due Time: " + task.time;
 
     taskItem.appendChild(title);
     taskItem.appendChild(taskDescription);
@@ -113,6 +113,41 @@ function createTaskElement(task, index) {
     return taskItem;
 }
 
+
+function createTaskModifiers(task, index) {
+    const taskModifiers = document.createElement('div');
+    taskModifiers.classList.add('taskModifiers');
+
+    const modifyTaskBtn = document.createElement('button');
+    modifyTaskBtn.textContent = "Modify";
+    modifyTaskBtn.classList.add('modifyTaskBtn');
+    modifyTaskBtn.addEventListener('click', () => {
+        removeTaskFromToday(todayTasks, index);
+        displayTasks(todayTasks);
+        formPopup();
+    });
+
+    const starTaskBtn = document.createElement('button');
+    starTaskBtn.textContent = "Star";
+    starTaskBtn.classList.add('starTaskBtn');
+    starTaskBtn.addEventListener('click', () => {
+        task.starred = !task.starred;
+        displayTasks(todayTasks);
+    });
+
+    const completeTaskBtn = document.createElement('button');
+    completeTaskBtn.textContent = "Complete";
+    completeTaskBtn.classList.add('completeTaskBtn');
+    completeTaskBtn.addEventListener('click', () => {
+        removeTaskFromToday(todayTasks, index);
+        displayTasks(todayTasks);
+    });
+
+    taskModifiers.appendChild(starTaskBtn);
+    taskModifiers.appendChild(completeTaskBtn);
+
+    return taskModifiers;
+}
 
 function displayTasks(arr) {
     const todayTasksContainer = document.querySelector('.taskTypes');
