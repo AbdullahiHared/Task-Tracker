@@ -1,3 +1,6 @@
+import {addUserTask} from './today.js';
+import {taskBtnAdder} from './today.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const taskTypes = document.querySelector('.taskTypes');
     const todayTasks = document.querySelector('.todayTasks');
@@ -16,7 +19,20 @@ document.addEventListener('DOMContentLoaded', () => {
             taskTypes.innerHTML = task.textContent + " Tasks";
             taskTypes.classList.add('activeTask');
         })
+
+        if (task === todayTasks) {
+            task.classList.add('active');
+        }
     })
+
+    // Move this block of code outside the forEach loop
+    const formPopup = document.querySelector('form');
+    if (formPopup) {
+        formPopup.addEventListener('submit', (event) => {
+            event.preventDefault();
+            addUserTask();
+        });
+    }
 
     // active icon
     const todayIcon = document.querySelector('.todayTasks img');
@@ -34,4 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
             icon.classList.add('activeIcon');
         })
     })
-})
+
+    taskBtnAdder();
+});

@@ -83,7 +83,53 @@ export function formPopup() {
             descriptionInput.textContent = "";
             inputTitle.textContent = "";
         });
+
+        // Add an event listener to the form to call the addUserTask function when the form is submitted
+        formPopup.addEventListener('submit', (event) => {
+            event.preventDefault();
+            addUserTask();
+        });
     }
 
     formPopup.classList.toggle('show');
+}
+
+function displayTasks(arr) {
+    const todayTasksContainer = document.querySelector('.taskTypes');
+    todayTasksContainer.innerHTML = "";
+
+    const taskHeader = document.createElement('h2');
+    taskHeader.textContent = "Today";
+    todayTasksContainer.appendChild(taskHeader);
+
+    const todayTasks = document.createElement('div');
+    todayTasks.classList.add('todayTasks');
+    todayTasksContainer.appendChild(todayTasks);
+
+    arr.forEach((task, index) => {
+        const title = document.createElement('h3');
+        const taskDescription = document.createElement('p');
+        const taskDate = document.createElement('p');
+        const taskStar = document.createElement('p');
+
+        title.textContent = task.title;
+        taskDescription.textContent = task.description;
+        taskDate.textContent = task.time;
+
+        todayTasks.appendChild(title);
+        todayTasks.appendChild(taskDescription);
+        todayTasks.appendChild(taskDate);
+    });
+}
+
+export function addUserTask() {
+    const taskTitle = document.querySelector('#taskTitle').value;
+    const taskDescription = document.querySelector('#taskDescription').value;
+    const taskDate = document.querySelector('#taskDate').value;
+
+    const userTask = new Task(taskTitle, taskDate, taskDescription, false);
+    addTaskToToday(todayTasks, userTask);
+    displayTasks(todayTasks); // Display the tasks after adding a new one
+    taskBtnAdder(); // Re-add the button to add a task
+    console.log(todayTasks);
 }
