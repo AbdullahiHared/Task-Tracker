@@ -42,7 +42,7 @@ header {
 }
 
 button, .taskTypes, .taskFilters {
-   border-radius:30px;
+    border-radius:30px;
 }
 
 header > img {
@@ -72,6 +72,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 10%;
+    overflow-y: auto; /* Added */
 }
 
 .taskTypes {
@@ -81,6 +82,17 @@ main {
     padding: 10px;
     background-color: #1d1d1e;
     border-radius: 10px;
+    font-family: Arial, sans-serif;
+    overflow-y: auto; /* Added */
+}
+
+.taskTypes > h2 {
+    color: #667d85;
+    font-weight: bold;
+    font-size: 1.5em;
+    font-style: normal;
+    margin-left: 15px;
+    margin-bottom:20px;
 }
 
 .taskLists {
@@ -196,15 +208,10 @@ button:hover {
 
 .taskAddBtn {
     position: absolute;
-    top:80%;
+    top: 80%;
     margin-left: 46%;
     text-align: center;
     height: 3em;
-}
-
-.taskTypes {
-    margin: 20px;
-    font-family: Arial, sans-serif;
 }
 
 .taskItem {
@@ -232,6 +239,7 @@ button:hover {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-right: 10px;
 }
 
 .taskModifiers button.modifyTaskBtn {
@@ -246,42 +254,9 @@ button:hover {
     background-color: #d9534f;
 }
 
-.form-popup {
-    display: none;
-    background-color: white;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-}
-
-.form-container {
+.tasksContainer {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow-x: auto;
 }
-
-.form-container input,
-.form-container textarea {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.form-container button {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.form-container button.cancelBtn {
-    background-color: #d9534f;
-}
-
