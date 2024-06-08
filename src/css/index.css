@@ -1,16 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Danfo&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Danfo&family=Shadows+Into+Light&display=swap');
 
+:root {
+    --primary-color: rgba(59, 255, 189, 0.2);
+    --secondary-color: #2b2121;
+    --tertiary-color: #a49e9d;
+    --font-family-main: "Shadows Into Light", cursive;
+    --font-family-secondary: "Danfo", serif;
+}
+
 /* Body */
 body {
-    font-family: "Shadows Into Light", cursive;
-    font-optical-sizing: auto;
-    font-variation-settings: "ELSH" 0;
+    font-family: var(--font-family-main), serif;
     margin: 0;
     padding: 0;
     background-color: rgba(2, 5, 5, 0.94);
     box-sizing: border-box;
-
     scroll-behavior: smooth;
 }
 
@@ -26,15 +31,18 @@ header {
     margin-right: 70%;
     word-spacing: 12px;
     font-size: 1.2em;
-    font-family: "Danfo", serif;
+    font-family: var(--font-family-secondary), serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-    font-variation-settings: "ELSH" 0;
 }
 
 .logoText > span:first-child {
     color: #667d85;
+}
+
+button, .taskTypes, .taskFilters {
+   border-radius:30px;
 }
 
 header > img {
@@ -193,3 +201,87 @@ button:hover {
     text-align: center;
     height: 3em;
 }
+
+.taskTypes {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.taskItem {
+    background: #333;
+    color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.taskItem h3,
+.taskItem p {
+    margin: 5px 0;
+}
+
+.taskModifiers {
+    display: flex;
+    gap: 10px;
+}
+
+.taskModifiers button {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.taskModifiers button.modifyTaskBtn {
+    background-color: #f0ad4e;
+}
+
+.taskModifiers button.starTaskBtn {
+    background-color: #f0ad4e;
+}
+
+.taskModifiers button.completeTaskBtn {
+    background-color: #d9534f;
+}
+
+.form-popup {
+    display: none;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-container input,
+.form-container textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-container button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-container button.cancelBtn {
+    background-color: #d9534f;
+}
+
