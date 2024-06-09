@@ -1,4 +1,4 @@
-export const todayTasks = [];
+export const todayTasks = []; // Array to store today's tasks
 
 class Task {
     constructor(title, time, description, starred) {
@@ -50,14 +50,14 @@ export function formPopup() {
         formContainer.appendChild(inputTitle);
         inputTitle.setAttribute('required', true);
 
-        const descriptionInput = document.createElement('textarea');
+        const descriptionInput = document.createElement('input');
         descriptionInput.setAttribute('placeholder', 'Description');
         descriptionInput.setAttribute('id', 'taskDescription');
         formContainer.appendChild(descriptionInput);
 
         const inputDate = document.createElement('input');
-        inputDate.setAttribute('type', 'date');
-        inputDate.setAttribute('placeholder', 'Task Date');
+        inputDate.setAttribute('type', 'time');
+        inputDate.setAttribute('value', '13:58');
         inputDate.setAttribute('id', 'taskDate');
         formContainer.appendChild(inputDate);
         inputDate.setAttribute('required', true);
@@ -99,9 +99,14 @@ function createTaskElement(task, index) {
     const taskDescription = document.createElement('h5');
     const taskTime = document.createElement('p');
 
-    title.textContent = "Title : " + task.title;
-    taskDescription.textContent = "Description: " + task.description;
-    taskTime.textContent = "Due Time: " + task.time;
+    title.textContent = task.title;
+    taskDescription.textContent = task.description;
+
+    if (taskTime < 12 && taskTime > 0) {
+        taskTime.textContent = task.time + " AM";
+    } else {
+        taskTime.textContent = task.time + " PM";
+    }
 
     taskItem.appendChild(title);
     taskItem.appendChild(taskDescription);
@@ -113,38 +118,38 @@ function createTaskElement(task, index) {
     return taskItem;
 }
 
-
 function createTaskModifiers(task, index) {
     const taskModifiers = document.createElement('div');
     taskModifiers.classList.add('taskModifiers');
 
-    const modifyTaskBtn = document.createElement('button');
-    modifyTaskBtn.textContent = "Modify";
-    modifyTaskBtn.classList.add('modifyTaskBtn');
-    modifyTaskBtn.addEventListener('click', () => {
-        removeTaskFromToday(todayTasks, index);
-        displayTasks(todayTasks);
+    const modifyTask = document.createElement('img');
+    modifyTask.src = "./images/editTask.svg";
+    modifyTask.classList.add('modifyTask');
+    modifyTask.addEventListener('click', () => {
         formPopup();
-    });
-
-    const starTaskBtn = document.createElement('button');
-    starTaskBtn.textContent = "Star";
-    starTaskBtn.classList.add('starTaskBtn');
-    starTaskBtn.addEventListener('click', () => {
-        task.starred = !task.starred;
-        displayTasks(todayTasks);
-    });
-
-    const completeTaskBtn = document.createElement('button');
-    completeTaskBtn.textContent = "Complete";
-    completeTaskBtn.classList.add('completeTaskBtn');
-    completeTaskBtn.addEventListener('click', () => {
         removeTaskFromToday(todayTasks, index);
         displayTasks(todayTasks);
     });
 
-    taskModifiers.appendChild(starTaskBtn);
-    taskModifiers.appendChild(completeTaskBtn);
+    const starTask = document.createElement('img');
+    starTask.src = "./images/taskStar.svg";
+    starTask.classList.add('starTask');
+    starTask.addEventListener('click', () => {
+        todayTasks[index].starred = !todayTasks[index].starred;
+        displayTasks(todayTasks);
+    });
+
+    const completeTask = document.createElement('img');
+    completeTask.src = "./images/completeTask.svg";
+    completeTask.classList.add('completeTask');
+    completeTask.addEventListener('click', () => {
+        removeTaskFromToday(todayTasks, index);
+        displayTasks(todayTasks);
+    });
+
+    taskModifiers.appendChild(starTask);
+    taskModifiers.appendChild(completeTask);
+    taskModifiers.appendChild(modifyTask);
 
     return taskModifiers;
 }
@@ -158,8 +163,14 @@ function displayTasks(arr) {
     todayTasksContainer.appendChild(taskHeader);
 
     const todayTasksDiv = document.createElement('div');
-    todayTasksDiv.classList.add('todayTasks');
+    todayTasksDiv.classList.add('tasksContainer');
     todayTasksContainer.appendChild(todayTasksDiv);
+
+    const taskAddBtn = document.createElement('button');
+    taskAddBtn.textContent = "Add Task";
+    taskAddBtn.classList.add('taskAddBtn');
+    taskAddBtn.addEventListener('click', formPopup);
+    todayTasksContainer.appendChild(taskAddBtn);
 
     arr.forEach((task, index) => {
         const taskElement = createTaskElement(task, index);
@@ -177,3 +188,5 @@ export function addUserTask() {
     displayTasks(todayTasks); // Display the tasks after adding a new one
     console.log(todayTasks);
 }
+
+
