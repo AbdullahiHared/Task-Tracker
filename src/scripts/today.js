@@ -17,6 +17,7 @@ function removeTaskFromToday(arr, index) {
     arr.splice(index, 1);
 }
 
+
 export function taskBtnAdder() {
     const taskTypes = document.querySelector('.taskTypes');
 
@@ -33,6 +34,8 @@ export function taskBtnAdder() {
     // Add an event listener to the button
     taskAddBtn.addEventListener('click', formPopup);
 }
+
+let modifyingTaskIndex = () => null;
 
 export function formPopup() {
     let formPopup = document.querySelector('.form-popup');
@@ -89,6 +92,14 @@ export function formPopup() {
     }
 
     formPopup.classList.toggle('show');
+    formPopup.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (modifyingTaskIndex !== null) {
+            removeTaskFromToday(todayTasks, modifyingTaskIndex);
+            modifyingTaskIndex = null; // Reset the modifyingTaskIndex
+        }
+        addUserTask();
+    });
 }
 
 function createTaskElement(task, index) {
@@ -127,10 +138,11 @@ function createTaskModifiers(task, index) {
     modifyTask.classList.add('modifyTask');
     modifyTask.addEventListener('click', () => {
         formPopup();
-        removeTaskFromToday(todayTasks, index);
-        displayTasks(todayTasks);
+        document.querySelector('#taskTitle').value = task.title;
+        document.querySelector('#taskDescription').value = task.description;
+        document.querySelector('#taskDate').value = task.time;
+        modifyingTaskIndex = index; // Store the index of the task being modified
     });
-
     const starTask = document.createElement('img');
     starTask.src = "./images/taskStar.svg";
     starTask.classList.add('starTask');
