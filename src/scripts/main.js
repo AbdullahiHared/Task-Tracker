@@ -1,5 +1,5 @@
-import {addUserTask} from './today.js';
-import {taskBtnAdder} from './today.js';
+import {} from './today.js';
+import {} from "./task.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const taskTypes = document.querySelector('.taskTypes');
@@ -8,29 +8,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const allTasks = document.querySelector('.allTasks');
     const starredTasks = document.querySelector('.starredTasks');
 
-    const taskFilters = [todayTasks, weekTasks, allTasks, starredTasks];
+    const taskFilters = [{
+        task: todayTasks,
+        name: "Today"
+    }, {
+        task: weekTasks,
+        name: "The next 7 days"
+    }, {
+        task: allTasks,
+        name: "All Tasks"
+    }, {
+        task: starredTasks,
+        name: "Important Tasks"
+    }];
 
-    taskFilters.forEach((task) => {
-        task.addEventListener('click', () => {
-            taskFilters.forEach((task) => {
-                task.classList.remove('active');
-            })
-            task.classList.add('active');
-            taskTypes.innerHTML = task.textContent + " Tasks";
+    taskFilters.forEach((taskFilter) => {
+        taskFilter.task.addEventListener('click', () => {
+            displayTaskAdder(taskFilter.task, taskFilter.name);
+            taskFilters.forEach(tf => tf.task.classList.remove('active'));
+            taskFilter.task.classList.add('active');
             taskTypes.classList.add('activeTask');
-        })
+        });
 
-        if (task === todayTasks) {
-            task.classList.add('active');
+        if (taskFilter.task === todayTasks) {
+            taskFilter.task.classList.add('active');
+            taskTypes.classList.add('activeTask');
         }
-    })
+    });
 
-    // Move this block of code outside the forEach loop
     const formPopup = document.querySelector('form');
     if (formPopup) {
         formPopup.addEventListener('submit', (event) => {
             event.preventDefault();
-            addUserTask();
+            addTaskToToday();
         });
     }
 
@@ -46,10 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
         icon.addEventListener('click', () => {
             icons.forEach((icon) => {
                 icon.classList.remove('activeIcon');
-            })
+            });
             icon.classList.add('activeIcon');
-        })
-    })
-
-    taskBtnAdder();
+        });
+    });
 });

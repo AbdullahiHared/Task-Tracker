@@ -1,4 +1,8 @@
-export const todayTasks = []; // Array to store today's tasks
+// Array to store all tasks
+export const allTasks = [];
+export const todayTasks = [];
+export const importantTasks = [];
+export const weeklyTasks = [];
 
 class Task {
     constructor(title, time, description, starred) {
@@ -9,35 +13,55 @@ class Task {
     }
 }
 
-function addTaskToToday(arr, userTask) {
+// Generic function to add a task to a specific array
+function addTaskToArray(arr, userTask) {
     arr.push(userTask);
 }
 
-function removeTaskFromToday(arr, index) {
+// Generic function to remove a task from a specific array
+function removeTaskFromArray(arr, index) {
     arr.splice(index, 1);
 }
 
-
-export function taskBtnAdder() {
-    const taskTypes = document.querySelector('.taskTypes');
-
-    taskTypes.textContent = "";
+function createTaskHeader(name) {
     const taskHeader = document.createElement('h2');
-    taskHeader.textContent = "Today";
-    taskTypes.appendChild(taskHeader);
-
-    const taskAddBtn = document.createElement('button');
-    taskAddBtn.textContent = "Add Task";
-    taskAddBtn.classList.add('taskAddBtn');
-    taskTypes.appendChild(taskAddBtn);
-
-    // Add an event listener to the button
-    taskAddBtn.addEventListener('click', formPopup);
+    taskHeader.textContent = name;
+    return taskHeader;
 }
 
-let modifyingTaskIndex = () => null;
+function createTaskAddButton() {
+    const addTaskButton = document.createElement('button');
+    addTaskButton.textContent = 'Add Task';
+    addTaskButton.addEventListener('click', formPopup);
+    return addTaskButton;
+}
 
-export function formPopup() {
+export function displayTaskAdder(task, name) {
+    const taskTypes = document.querySelector('.taskTypes');
+    if (!taskTypes || !task) {
+        console.error('Required elements not found');
+        return;
+    }
+
+    if (!(task instanceof HTMLElement)) {
+        console.error('Task is not a valid DOM element');
+        return;
+    }
+
+    taskTypes.innerHTML = '';
+    taskTypes.appendChild(createTaskHeader(name));
+    taskTypes.appendChild(createTaskAddButton());
+
+    task.classList.add('active');
+    taskTypes.classList.add('activeTask');
+}
+
+// Function to display the task adder interface
+displayTaskAdder(todayTasks, "Today");
+
+let modifyingTaskIndex = null;
+
+export function formPopup(category) {
     let formPopup = document.querySelector('.form-popup');
     if (!formPopup) {
         formPopup = document.createElement('form');
@@ -84,7 +108,11 @@ export function formPopup() {
 
         formPopup.addEventListener('submit', (event) => {
             event.preventDefault();
-            addUserTask();
+            if (modifyingTaskIndex !== null) {
+                removeTaskFromArray(category, modifyingTaskIndex);
+                modifyingTaskIndex = null; // Reset the modifyingTaskIndex
+            }
+            addUserTask(category);
         });
 
         const taskTypes = document.querySelector('.taskTypes');
@@ -92,17 +120,9 @@ export function formPopup() {
     }
 
     formPopup.classList.toggle('show');
-    formPopup.addEventListener('submit', (event) => {
-        event.preventDefault();
-        if (modifyingTaskIndex !== null) {
-            removeTaskFromToday(todayTasks, modifyingTaskIndex);
-            modifyingTaskIndex = null; // Reset the modifyingTaskIndex
-        }
-        addUserTask();
-    });
 }
 
-function createTaskElement(task, index) {
+function createTaskElement(task, index, category) {
     const taskItem = document.createElement('div');
     taskItem.classList.add('taskItem');
 
@@ -113,7 +133,7 @@ function createTaskElement(task, index) {
     title.textContent = task.title;
     taskDescription.textContent = task.description;
 
-    if (taskTime < 12 && taskTime > 0) {
+    if (task.time < 12 && task.time > 0) {
         taskTime.textContent = task.time + " AM";
     } else {
         taskTime.textContent = task.time + " PM";
@@ -123,13 +143,13 @@ function createTaskElement(task, index) {
     taskItem.appendChild(taskDescription);
     taskItem.appendChild(taskTime);
 
-    const taskModifiers = createTaskModifiers(task, index);
+    const taskModifiers = createTaskModifiers(task, index, category);
     taskItem.appendChild(taskModifiers);
 
     return taskItem;
 }
 
-function createTaskModifiers(task, index) {
+function createTaskModifiers(task, index, category) {
     const taskModifiers = document.createElement('div');
     taskModifiers.classList.add('taskModifiers');
 
@@ -137,26 +157,27 @@ function createTaskModifiers(task, index) {
     modifyTask.src = "./images/editTask.svg";
     modifyTask.classList.add('modifyTask');
     modifyTask.addEventListener('click', () => {
-        formPopup();
+        formPopup(category);
         document.querySelector('#taskTitle').value = task.title;
         document.querySelector('#taskDescription').value = task.description;
         document.querySelector('#taskDate').value = task.time;
         modifyingTaskIndex = index; // Store the index of the task being modified
     });
+
     const starTask = document.createElement('img');
     starTask.src = "./images/taskStar.svg";
     starTask.classList.add('starTask');
     starTask.addEventListener('click', () => {
-        todayTasks[index].starred = !todayTasks[index].starred;
-        displayTasks(todayTasks);
+        category[index].starred = !category[index].starred;
+        displayTasks(category);
     });
 
     const completeTask = document.createElement('img');
     completeTask.src = "./images/completeTask.svg";
     completeTask.classList.add('completeTask');
     completeTask.addEventListener('click', () => {
-        removeTaskFromToday(todayTasks, index);
-        displayTasks(todayTasks);
+        removeTaskFromArray(category, index);
+        displayTasks(category);
     });
 
     taskModifiers.appendChild(starTask);
@@ -166,7 +187,7 @@ function createTaskModifiers(task, index) {
     return taskModifiers;
 }
 
-function displayTasks(arr) {
+export function displayTasks(arr) {
     const todayTasksContainer = document.querySelector('.taskTypes');
     todayTasksContainer.textContent = "";
 
@@ -181,24 +202,38 @@ function displayTasks(arr) {
     const taskAddBtn = document.createElement('button');
     taskAddBtn.textContent = "Add Task";
     taskAddBtn.classList.add('taskAddBtn');
-    taskAddBtn.addEventListener('click', formPopup);
+    taskAddBtn.addEventListener('click', () => formPopup(arr));
     todayTasksContainer.appendChild(taskAddBtn);
 
     arr.forEach((task, index) => {
-        const taskElement = createTaskElement(task, index);
+        const taskElement = createTaskElement(task, index, arr);
         todayTasksDiv.appendChild(taskElement);
     });
 }
 
-export function addUserTask() {
+function addUserTask(arr) {
     const taskTitle = document.querySelector('#taskTitle').value;
     const taskDescription = document.querySelector('#taskDescription').value;
     const taskDate = document.querySelector('#taskDate').value;
 
     const userTask = new Task(taskTitle, taskDate, taskDescription, false);
-    addTaskToToday(todayTasks, userTask);
-    displayTasks(todayTasks); // Display the tasks after adding a new one
-    console.log(todayTasks);
+    addTaskToArray(arr, userTask);
+    addTaskToArray(allTasks, userTask);
+    displayTasks(arr); // Display the tasks after adding a new one
 }
 
+// call addUserTask for today's tasks
+export const addTaskToToday = () => {
+    return addUserTask(todayTasks);
+}
+
+//  call addUserTask for important tasks
+export const addTaskToImportant = () => {
+    return addUserTask(importantTasks);
+}
+
+// call addUserTask for weekly tasks
+export const addTaskToWeekly = () => {
+    return addUserTask(weeklyTasks);
+}
 
