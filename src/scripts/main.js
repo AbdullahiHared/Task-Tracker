@@ -1,5 +1,4 @@
-import {} from './today.js';
-import {} from "./task.js";
+import {displayTodayTasks, displayTaskToWeekly, displayTaskToImportant, displayTaskToAll} from "./task";
 
 document.addEventListener('DOMContentLoaded', () => {
     const taskTypes = document.querySelector('.taskTypes');
@@ -10,21 +9,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const taskFilters = [{
         task: todayTasks,
-        name: "Today"
+        name: "Today",
+        displayFunc: displayTodayTasks
     }, {
         task: weekTasks,
-        name: "The next 7 days"
+        name: "The next 7 days",
+        displayFunc: displayTaskToWeekly
     }, {
         task: allTasks,
-        name: "All Tasks"
+        name: "All Tasks",
+        displayFunc: displayTaskToAll
     }, {
         task: starredTasks,
-        name: "Important Tasks"
+        name: "Important Tasks",
+        displayFunc: displayTaskToImportant
     }];
 
     taskFilters.forEach((taskFilter) => {
         taskFilter.task.addEventListener('click', () => {
-            displayTaskAdder(taskFilter.task, taskFilter.name);
             taskFilters.forEach(tf => tf.task.classList.remove('active'));
             taskFilter.task.classList.add('active');
             taskTypes.classList.add('activeTask');
@@ -40,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formPopup) {
         formPopup.addEventListener('submit', (event) => {
             event.preventDefault();
-            addTaskToToday();
         });
     }
 
@@ -60,4 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
             icon.classList.add('activeIcon');
         });
     });
+
+    displayTodayTasks();
 });

@@ -1,5 +1,5 @@
 import { addTaskToArray, removeTaskFromArray } from './taskUtils.js';
-import { displayTasks } from './taskDisplay.js';
+import { displayTaskAdder} from './taskDisplay.js';
 import { Task } from './task.js';
 
 let modifyingTaskIndex = null;
@@ -72,5 +72,5 @@ function addUserTask(category) {
 
     const userTask = new Task(taskTitle, taskDate, taskDescription, false);
     addTaskToArray(category, userTask);
-    displayTasks(category); // Display the tasks after adding a new one
+    displayTaskAdder(category); // Display the tasks after adding a new one
 }

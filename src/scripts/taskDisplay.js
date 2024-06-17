@@ -1,25 +1,37 @@
 import { createTaskElement } from './taskUtils.js';
+import { formPopup } from './taskForm.js';
 
-export function displayTasks(category) {
-    const todayTasksContainer = document.querySelector('.taskTypes');
-    todayTasksContainer.textContent = "";
-
+function createTaskHeader(name) {
     const taskHeader = document.createElement('h2');
-    taskHeader.textContent = category === todayTasks ? "Today" : "Tasks";
-    todayTasksContainer.appendChild(taskHeader);
+    taskHeader.textContent = name;
+    return taskHeader;
+}
 
-    const todayTasksDiv = document.createElement('div');
-    todayTasksDiv.classList.add('tasksContainer');
-    todayTasksContainer.appendChild(todayTasksDiv);
+function createTaskAddButton() {
+    const addTaskButton = document.createElement('button');
+    addTaskButton.textContent = 'Add Task';
+    addTaskButton.addEventListener('click', formPopup);
+    return addTaskButton;
+}
 
-    const taskAddBtn = document.createElement('button');
-    taskAddBtn.textContent = "Add Task";
-    taskAddBtn.classList.add('taskAddBtn');
-    taskAddBtn.addEventListener('click', () => formPopup(category));
-    todayTasksContainer.appendChild(taskAddBtn);
+export function displayTaskAdder(task, name) {
+    const taskTypes = document.querySelector('.taskTypes');
+    if (!taskTypes || !task) {
+        console.error('Required elements not found');
+        return;
+    }
 
-    category.forEach((task, index) => {
-        const taskElement = createTaskElement(task, index, category, displayTasks);
-        todayTasksDiv.appendChild(taskElement);
-    });
+    if (!(task instanceof HTMLElement)) {
+        console.error('Task is not a valid DOM element');
+        return;
+    }
+
+    taskTypes.innerHTML = '';
+    taskTypes.appendChild(createTaskHeader(name));
+    taskTypes.appendChild(createTaskAddButton());
+
+    task.classList.add('active');
+    taskTypes.classList.add('activeTask');
+
+    createTaskAddButton();
 }
