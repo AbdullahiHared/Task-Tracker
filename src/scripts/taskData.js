@@ -1,4 +1,4 @@
-export const allTasks = [];
-export const todayTasks = [];
-export const importantTasks = [];
-export const weeklyTasks = [];
+export const allTasksData = [];
+export const todayTasksData = [];
+export const importantTasksData = [];
+export const weeklyTasksData = [];
