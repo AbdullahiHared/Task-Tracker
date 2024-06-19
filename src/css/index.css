@@ -202,7 +202,13 @@ button:hover {
     margin-left: 8.5%;
 }
 
-.activeTask,
+/* Task Area */
+.activeTask {
+    background: #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+}
 .taskTypes {
     color: #a660d2;
     font-size: 1.3em;
