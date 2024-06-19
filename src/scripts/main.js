@@ -1,5 +1,3 @@
-import {displayTodayTasks, displayTaskToWeekly, displayTaskToImportant, displayTaskToAll} from "./task";
-
 document.addEventListener('DOMContentLoaded', () => {
     const taskTypes = document.querySelector('.taskTypes');
     const todayTasks = document.querySelector('.todayTasks');
@@ -10,32 +8,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskFilters = [{
         task: todayTasks,
         name: "Today",
-        displayFunc: displayTodayTasks
+        data: "todayTasksData",
     }, {
         task: weekTasks,
         name: "The next 7 days",
-        displayFunc: displayTaskToWeekly
+        data: "weeklyTasksData",
     }, {
         task: allTasks,
         name: "All Tasks",
-        displayFunc: displayTaskToAll
+        data: "allTasksData",
     }, {
         task: starredTasks,
         name: "Important Tasks",
-        displayFunc: displayTaskToImportant
+        data: "importantTasksData",
     }];
 
     taskFilters.forEach((taskFilter) => {
         taskFilter.task.addEventListener('click', () => {
-            taskFilters.forEach(tf => tf.task.classList.remove('active'));
-            taskFilter.task.classList.add('active');
-            taskTypes.classList.add('activeTask');
+            taskFilters.forEach((taskFilter) => {
+                taskFilter.task.classList.remove('activeTask');
+            });
+            taskFilter.task.classList.add('activeTask');
+            taskTypes.textContent = taskFilter.name;
         });
-
-        if (taskFilter.task === todayTasks) {
-            taskFilter.task.classList.add('active');
-            taskTypes.classList.add('activeTask');
-        }
     });
 
     const formPopup = document.querySelector('form');
@@ -45,14 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // active icon
     const todayIcon = document.querySelector('.todayTasks img');
     const allIcon = document.querySelector('.allTasks img');
     const starredIcon = document.querySelector('.starredTasks img');
     const weekIcon = document.querySelector('.weekTasks img');
 
     const icons = [todayIcon, allIcon, starredIcon, weekIcon];
-
     icons.forEach((icon) => {
         icon.addEventListener('click', () => {
             icons.forEach((icon) => {
@@ -61,6 +54,4 @@ document.addEventListener('DOMContentLoaded', () => {
             icon.classList.add('activeIcon');
         });
     });
-
-    displayTodayTasks();
 });

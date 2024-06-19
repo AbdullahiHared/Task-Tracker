@@ -1,7 +1,6 @@
 import { addTaskToArray, removeTaskFromArray } from './taskUtils.js';
 import { displayTaskAdder} from './taskDisplay.js';
-import { Task } from './task.js';
-
+import {Task } from './task.js';
 let modifyingTaskIndex = null;
 
 export function formPopup(category) {

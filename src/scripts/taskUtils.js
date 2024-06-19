@@ -1,20 +1,18 @@
-import { allTasks } from './taskData.js';
-import { displayTasks } from "./taskDisplay";
+// Purpose: Contains utility functions for task data and task display
+import {displayTaskAdder} from "./taskDisplay";
 import { formPopup } from "./taskForm";
+import {Task} from "./task";
 
-const Task = class {
-    constructor(title, time, description, starred) {
-        this.title = title;
-        this.time = time;
-        this.description = description;
-        this.starred = starred;
-    }
-}
+// Set up the task data arrays
+export const allTasksData = [];
+export const todayTasksData = [];
+export const importantTasksData = [];
+export const weeklyTasksData = [];
 
 // Function to add a task to an array and allTasks
 export function addTaskToArray(arr, userTask) {
     arr.push(userTask);
-    allTasks.push(userTask);
+    allTasksData.push(userTask);
 }
 
 // Function to remove a task from an array
@@ -79,7 +77,7 @@ function createTaskModifiers(task, index, category) {
     starTask.classList.add('starTask');
     starTask.addEventListener('click', () => {
         category[index].starred = !category[index].starred;
-        displayTasks(category);
+        displayTaskAdder(category, name);
     });
 
     const completeTask = document.createElement('img');
@@ -105,5 +103,16 @@ export function addUserTask(arr) {
 
     const userTask = new Task(taskTitle, taskDate, taskDescription, false);
     addTaskToArray(arr, userTask);
-    displayTasks(arr); // Display the tasks after adding a new one
+    displayTaskAdder(arr); // Display the tasks after adding a new one
 }
+
+export const displayForm = () => {
+    const taskAddBtn = document.querySelector('.addTaskBtn');
+    taskAddBtn.addEventListener('click', () => formPopup(allTasksData));
+    console.log("Task Adding Btn Clicked")
+}
+
+
+
+
+

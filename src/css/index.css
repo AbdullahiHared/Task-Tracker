@@ -113,6 +113,14 @@ button {
     border-radius: 20px;
 }
 
+.addTaskBtn {
+    position: relative;
+    top: 70%;
+    left: 40%;
+    text-align: center;
+    height: 3em;
+}
+
 /* Tasks */
 .todayTasks,
 .weekTasks,

@@ -9,12 +9,14 @@ function createTaskHeader(name) {
 
 function createTaskAddButton() {
     const addTaskButton = document.createElement('button');
+    addTaskButton.classList.add('addTaskBtn');
     addTaskButton.textContent = 'Add Task';
     addTaskButton.addEventListener('click', formPopup);
     return addTaskButton;
 }
 
 export function displayTaskAdder(task, name) {
+    console.log("Displaying task : " , task , name);
     const taskTypes = document.querySelector('.taskTypes');
     if (!taskTypes || !task) {
         console.error('Required elements not found');
