@@ -1,7 +1,16 @@
 // Purpose: Contains utility functions for task data and task display
-import {displayTaskAdder} from "./taskDisplay";
-import { formPopup } from "./taskForm";
-import {Task} from "./task";
+import {displayTaskAdder} from "./taskDisplay.js";
+import { formPopup } from "./taskForm.js";
+
+// Task class
+class Task {
+    constructor(title, time, description, starred) {
+        this.title = title;
+        this.time = time;
+        this.description = description;
+        this.starred = starred;
+    }
+}
 
 // Set up the task data arrays
 export const allTasksData = [];
@@ -52,7 +61,7 @@ function formatTime(time) {
 }
 
 // Function to create task modifiers (buttons for modify, star, complete)
-function createTaskModifiers(task, index, category) {
+function createTaskModifiers(task, index, category, name) {
     const taskModifiers = document.createElement('div');
     taskModifiers.classList.add('taskModifiers');
 
@@ -77,7 +86,7 @@ function createTaskModifiers(task, index, category) {
     starTask.classList.add('starTask');
     starTask.addEventListener('click', () => {
         category[index].starred = !category[index].starred;
-        displayTaskAdder(category, name);
+        displayTaskAdder(name);
     });
 
     const completeTask = document.createElement('img');
@@ -111,6 +120,7 @@ export const displayForm = () => {
     taskAddBtn.addEventListener('click', () => formPopup(allTasksData));
     console.log("Task Adding Btn Clicked")
 }
+
 
 
 

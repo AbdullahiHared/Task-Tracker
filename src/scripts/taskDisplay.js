@@ -1,4 +1,3 @@
-import { createTaskElement } from './taskUtils.js';
 import { formPopup } from './taskForm.js';
 
 function createTaskHeader(name) {
@@ -15,25 +14,17 @@ function createTaskAddButton() {
     return addTaskButton;
 }
 
-export function displayTaskAdder(task, name) {
-    console.log("Displaying task : " , task , name);
+export function displayTaskAdder(name) {
+    console.log("Displaying task : ", name);
     const taskTypes = document.querySelector('.taskTypes');
-    if (!taskTypes || !task) {
+    if (!taskTypes) {
         console.error('Required elements not found');
-        return;
-    }
-
-    if (!(task instanceof HTMLElement)) {
-        console.error('Task is not a valid DOM element');
         return;
     }
 
     taskTypes.innerHTML = '';
     taskTypes.appendChild(createTaskHeader(name));
     taskTypes.appendChild(createTaskAddButton());
-
-    task.classList.add('active');
     taskTypes.classList.add('activeTask');
-
     createTaskAddButton();
 }

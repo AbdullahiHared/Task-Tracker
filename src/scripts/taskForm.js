@@ -1,7 +1,4 @@
 import { addTaskToArray, removeTaskFromArray } from './taskUtils.js';
-import { displayTaskAdder} from './taskDisplay.js';
-import {Task } from './task.js';
-let modifyingTaskIndex = null;
 
 export function formPopup(category) {
     let formPopup = document.querySelector('.form-popup');
@@ -64,12 +61,4 @@ export function formPopup(category) {
     formPopup.classList.toggle('show');
 }
 
-function addUserTask(category) {
-    const taskTitle = document.querySelector('#taskTitle').value;
-    const taskDescription = document.querySelector('#taskDescription').value;
-    const taskDate = document.querySelector('#taskDate').value;
 
-    const userTask = new Task(taskTitle, taskDate, taskDescription, false);
-    addTaskToArray(category, userTask);
-    displayTaskAdder(category); // Display the tasks after adding a new one
-}

@@ -1,26 +1,24 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const taskTypes = document.querySelector('.taskTypes');
-    const todayTasks = document.querySelector('.todayTasks');
-    const weekTasks = document.querySelector('.weekTasks');
-    const allTasks = document.querySelector('.allTasks');
-    const starredTasks = document.querySelector('.starredTasks');
+export const taskTypes = document.querySelector('.taskTypes');
+export const todayTasks = document.querySelector('.todayTasks');
+export const weekTasks = document.querySelector('.weekTasks');
+export const allTasks = document.querySelector('.allTasks');
+export const starredTasks = document.querySelector('.starredTasks');
+import {renderTodayTasksBtn} from "./today.js";
 
+document.addEventListener('DOMContentLoaded', () => {
     const taskFilters = [{
         task: todayTasks,
-        name: "Today",
-        data: "todayTasksData",
+        name : "Today's Tasks",
+        func : renderTodayTasksBtn,
     }, {
         task: weekTasks,
-        name: "The next 7 days",
-        data: "weeklyTasksData",
+        name : "This Week's Tasks",
     }, {
         task: allTasks,
-        name: "All Tasks",
-        data: "allTasksData",
+        name : "All Tasks",
     }, {
         task: starredTasks,
-        name: "Important Tasks",
-        data: "importantTasksData",
+        name : "Starred Tasks",
     }];
 
     taskFilters.forEach((taskFilter) => {
@@ -28,17 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
             taskFilters.forEach((taskFilter) => {
                 taskFilter.task.classList.remove('activeTask');
             });
+            if (taskFilter.func) {
+                taskFilter.func();
+            }
             taskFilter.task.classList.add('activeTask');
-            taskTypes.textContent = taskFilter.name;
+            console.log("Task clicked : ", taskFilter.name);
         });
     });
-
-    const formPopup = document.querySelector('form');
-    if (formPopup) {
-        formPopup.addEventListener('submit', (event) => {
-            event.preventDefault();
-        });
-    }
 
     const todayIcon = document.querySelector('.todayTasks img');
     const allIcon = document.querySelector('.allTasks img');
