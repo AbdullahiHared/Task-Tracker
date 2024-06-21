@@ -4,10 +4,15 @@ import {todayTasksData} from "./taskUtils.js";
 import {formPopup} from "./taskForm.js";
 import {displayTaskAdder} from "./taskDisplay.js";
 import {taskTypes} from "./main.js";
+import {createTaskHeader} from "./taskDisplay.js";
+import {createTaskAddButton} from "./taskDisplay.js";
 
 export function renderTodayTasksBtn() {
     todayTasks.addEventListener('click', () => {
-        console.log("Today tasks clicked");
-        displayTaskAdder("Today's Tasks");
+        taskTypes.innerHTML = '';
+        taskTypes.appendChild(createTaskHeader('Today'));
+        taskTypes.appendChild(createTaskAddButton());
+        taskTypes.classList.add('activeTask');
+        displayTaskAdder('Today');
     });
 }

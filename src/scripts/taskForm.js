@@ -1,6 +1,9 @@
 import { addTaskToArray, removeTaskFromArray } from './taskUtils.js';
+import { addUserTask } from './taskUtils.js';
 
-export function formPopup(category) {
+let modifyingTaskIndex = null;
+
+export function formPopup(categoryName) {
     let formPopup = document.querySelector('.form-popup');
     if (!formPopup) {
         formPopup = document.createElement('form');
@@ -48,10 +51,10 @@ export function formPopup(category) {
         formPopup.addEventListener('submit', (event) => {
             event.preventDefault();
             if (modifyingTaskIndex !== null) {
-                removeTaskFromArray(category, modifyingTaskIndex);
+                removeTaskFromArray(categoryName, modifyingTaskIndex);
                 modifyingTaskIndex = null; // Reset the modifyingTaskIndex
             }
-            addUserTask(category);
+            addUserTask(categoryName);
         });
 
         const taskTypes = document.querySelector('.taskTypes');
@@ -60,5 +63,3 @@ export function formPopup(category) {
 
     formPopup.classList.toggle('show');
 }
-
-

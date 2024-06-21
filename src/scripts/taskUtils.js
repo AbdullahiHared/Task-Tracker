@@ -1,6 +1,4 @@
-// Purpose: Contains utility functions for task data and task display
-import {displayTaskAdder} from "./taskDisplay.js";
-import { formPopup } from "./taskForm.js";
+import { displayTaskAdder } from "./taskDisplay.js";
 
 // Task class
 class Task {
@@ -18,15 +16,30 @@ export const todayTasksData = [];
 export const importantTasksData = [];
 export const weeklyTasksData = [];
 
+const taskData = [
+    { name: "All Tasks", data: allTasksData },
+    { name: "Today", data: todayTasksData },
+    { name: "Important", data: importantTasksData },
+    { name: "Weekly", data: weeklyTasksData }
+];
+
 // Function to add a task to an array and allTasks
-export function addTaskToArray(arr, userTask) {
-    arr.push(userTask);
-    allTasksData.push(userTask);
+export function addTaskToArray(dataName, userTask) {
+    taskData.forEach((taskCategory) => {
+        if (taskCategory.name === dataName) {
+            taskCategory.data.push(userTask);
+        }
+    });
+    allTasksData.push(userTask); // Add to allTasks as well
 }
 
 // Function to remove a task from an array
-export function removeTaskFromArray(arr, index) {
-    arr.splice(index, 1);
+export function removeTaskFromArray(dataName, index) {
+    taskData.forEach((taskCategory) => {
+        if (taskCategory.name === dataName) {
+            taskCategory.data.splice(index, 1);
+        }
+    });
 }
 
 // Function to create a task element
@@ -61,7 +74,7 @@ function formatTime(time) {
 }
 
 // Function to create task modifiers (buttons for modify, star, complete)
-function createTaskModifiers(task, index, category, name) {
+function createTaskModifiers(task, index, category) {
     const taskModifiers = document.createElement('div');
     taskModifiers.classList.add('taskModifiers');
 
@@ -69,7 +82,7 @@ function createTaskModifiers(task, index, category, name) {
     modifyTask.src = "./images/editTask.svg";
     modifyTask.classList.add('modifyTask');
     modifyTask.addEventListener('click', () => {
-        formPopup(category);
+        formPopup(category.name); // Pass the category name
         const taskTitle = document.querySelector('#taskTitle');
         const taskDescription = document.querySelector('#taskDescription');
         const taskDate = document.querySelector('#taskDate');
@@ -85,16 +98,16 @@ function createTaskModifiers(task, index, category, name) {
     starTask.src = "./images/taskStar.svg";
     starTask.classList.add('starTask');
     starTask.addEventListener('click', () => {
-        category[index].starred = !category[index].starred;
-        displayTaskAdder(name);
+        task.starred = !task.starred;
+        displayTaskAdder(category.name);
     });
 
     const completeTask = document.createElement('img');
     completeTask.src = "./images/completeTask.svg";
     completeTask.classList.add('completeTask');
     completeTask.addEventListener('click', () => {
-        removeTaskFromArray(category, index);
-        displayTasks(category);
+        removeTaskFromArray(category.name, index);
+        displayTaskAdder(category.name);
     });
 
     taskModifiers.appendChild(starTask);
@@ -105,24 +118,18 @@ function createTaskModifiers(task, index, category, name) {
 }
 
 // Function to add a user task
-export function addUserTask(arr) {
+export function addUserTask(categoryName) {
     const taskTitle = document.querySelector('#taskTitle').value;
     const taskDescription = document.querySelector('#taskDescription').value;
     const taskDate = document.querySelector('#taskDate').value;
 
     const userTask = new Task(taskTitle, taskDate, taskDescription, false);
-    addTaskToArray(arr, userTask);
-    displayTaskAdder(arr); // Display the tasks after adding a new one
+    addTaskToArray(categoryName, userTask);
+    displayTaskAdder(categoryName); // Display the tasks after adding a new one
 }
 
 export const displayForm = () => {
     const taskAddBtn = document.querySelector('.addTaskBtn');
-    taskAddBtn.addEventListener('click', () => formPopup(allTasksData));
+    taskAddBtn.addEventListener('click', (event) => formPopup(event));
     console.log("Task Adding Btn Clicked")
-}
-
-
-
-
-
-
+};
