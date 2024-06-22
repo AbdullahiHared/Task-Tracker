@@ -4,22 +4,24 @@ import { addUserTask } from './taskUtils.js';
 let modifyingTaskIndex = null;
 
 export function formPopup(categoryName) {
-    let formPopup = document.querySelector('.form-popup');
-    if (!formPopup) {
-        formPopup = document.createElement('form');
-        formPopup.classList.add('form-popup');
+    let formPopupElement = document.querySelector('.form-popup');
+    if (!formPopupElement) {
+        formPopupElement = document.createElement('form');
+        formPopupElement.classList.add('form-popup');
+        
         const formContainer = document.createElement('div');
         formContainer.classList.add('form-container');
-        formPopup.appendChild(formContainer);
+        formPopupElement.appendChild(formContainer);
 
         const inputTitle = document.createElement('input');
         inputTitle.setAttribute('type', 'text');
         inputTitle.setAttribute('placeholder', 'Task Name');
         inputTitle.setAttribute('id', 'taskTitle');
-        formContainer.appendChild(inputTitle);
         inputTitle.setAttribute('required', true);
+        formContainer.appendChild(inputTitle);
 
         const descriptionInput = document.createElement('input');
+        descriptionInput.setAttribute('type', 'text');
         descriptionInput.setAttribute('placeholder', 'Description');
         descriptionInput.setAttribute('id', 'taskDescription');
         formContainer.appendChild(descriptionInput);
@@ -28,8 +30,8 @@ export function formPopup(categoryName) {
         inputDate.setAttribute('type', 'time');
         inputDate.setAttribute('value', '13:58');
         inputDate.setAttribute('id', 'taskDate');
-        formContainer.appendChild(inputDate);
         inputDate.setAttribute('required', true);
+        formContainer.appendChild(inputDate);
 
         const submitBtn = document.createElement('button');
         submitBtn.textContent = "Add task";
@@ -42,24 +44,35 @@ export function formPopup(categoryName) {
         formContainer.appendChild(cancelBtn);
 
         cancelBtn.addEventListener('click', () => {
-            formPopup.classList.toggle('show');
-            inputTitle.value = "";
-            descriptionInput.value = "";
-            inputDate.value = "";
+            formPopupElement.classList.remove('show');
+            clearFormInputs();
         });
 
-        formPopup.addEventListener('submit', (event) => {
+        formPopupElement.addEventListener('submit', (event) => {
             event.preventDefault();
             if (modifyingTaskIndex !== null) {
                 removeTaskFromArray(categoryName, modifyingTaskIndex);
-                modifyingTaskIndex = null; // Reset the modifyingTaskIndex
+                modifyingTaskIndex = null;
             }
             addUserTask(categoryName);
+            formPopupElement.classList.remove('show');
+            clearFormInputs();
         });
 
         const taskTypes = document.querySelector('.taskTypes');
-        taskTypes.appendChild(formPopup);
+        taskTypes.appendChild(formPopupElement);
     }
 
-    formPopup.classList.toggle('show');
+    formPopupElement.classList.toggle('show');
+}
+
+function clearFormInputs() {
+    const inputTitle = document.querySelector('#taskTitle');
+    const descriptionInput = document.querySelector('#taskDescription');
+    const inputDate = document.querySelector('#taskDate');
+    if (inputTitle && descriptionInput && inputDate) {
+        inputTitle.value = "";
+        descriptionInput.value = "";
+        inputDate.value = "13:58"; // Reset to default time
+    }
 }

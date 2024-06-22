@@ -1,39 +1,38 @@
-export const taskTypes = document.querySelector('.taskTypes');
-export const todayTasks = document.querySelector('.todayTasks');
-export const weekTasks = document.querySelector('.weekTasks');
-export const allTasks = document.querySelector('.allTasks');
-export const starredTasks = document.querySelector('.starredTasks');
-import {renderTodayTasksBtn} from "./today.js";
+// imports
+import {renderAllTasksBtns} from './taskRender.js';
+// Define DOM elements
+let taskTypes;
+let todayTasks;
+let weekTasks;
+let allTasks;
+let starredTasks;
+
+// Define task filters
+export let taskFilterBtns =  [todayTasks, weekTasks, allTasks, starredTasks];
 
 document.addEventListener('DOMContentLoaded', () => {
-    const taskFilters = [{
-        task: todayTasks,
-        name : "Today's Tasks",
-        func : renderTodayTasksBtn,
-    }, {
-        task: weekTasks,
-        name : "This Week's Tasks",
-    }, {
-        task: allTasks,
-        name : "All Tasks",
-    }, {
-        task: starredTasks,
-        name : "Starred Tasks",
-    }];
+    taskTypes = document.querySelector('.taskTypes');
+    todayTasks = document.querySelector('.todayTasks');
+    weekTasks = document.querySelector('.weekTasks');
+    allTasks = document.querySelector('.allTasks');
+    starredTasks = document.querySelector('.starredTasks');
 
+    // Add event listeners to task filters
     taskFilters.forEach((taskFilter) => {
         taskFilter.task.addEventListener('click', () => {
-            taskFilters.forEach((taskFilter) => {
-                taskFilter.task.classList.remove('activeTask');
+            taskFilters.forEach((tf) => {
+                tf.task.classList.remove('activeTask');
             });
-            if (taskFilter.func) {
-                taskFilter.func();
-            }
             taskFilter.task.classList.add('activeTask');
             console.log("Task clicked : ", taskFilter.name);
         });
+
+        if (taskFilter.func) {
+            taskFilter.func();
+        };
     });
 
+    // Add event listeners to icons (assuming they toggle active state)
     const todayIcon = document.querySelector('.todayTasks img');
     const allIcon = document.querySelector('.allTasks img');
     const starredIcon = document.querySelector('.starredTasks img');
@@ -42,10 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const icons = [todayIcon, allIcon, starredIcon, weekIcon];
     icons.forEach((icon) => {
         icon.addEventListener('click', () => {
-            icons.forEach((icon) => {
-                icon.classList.remove('activeIcon');
+            icons.forEach((i) => {
+                i.classList.remove('activeIcon');
             });
             icon.classList.add('activeIcon');
         });
     });
+
+    todayTasks.classList.add('activeTask');
+    renderAllTasksBtns();
 });
+
+export { taskTypes, todayTasks, weekTasks, allTasks, starredTasks };

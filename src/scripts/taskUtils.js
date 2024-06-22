@@ -1,4 +1,5 @@
 import { displayTaskAdder } from "./taskDisplay.js";
+import { formPopup } from "./taskForm.js";
 
 // Task class
 class Task {
@@ -42,6 +43,15 @@ export function removeTaskFromArray(dataName, index) {
     });
 }
 
+// Function to update a task in an array
+export function updateTaskInArray(dataName, index, updatedTask) {
+    taskData.forEach((taskCategory) => {
+        if (taskCategory.name === dataName) {
+            taskCategory.data[index] = updatedTask;
+        }
+    });
+}
+
 // Function to create a task element
 export function createTaskElement(task, index, category) {
     const taskItem = document.createElement('div');
@@ -73,6 +83,8 @@ function formatTime(time) {
     return `${formattedHour}:${minute.toString().padStart(2, '0')} ${period}`;
 }
 
+let modifyingTaskIndex = null;
+
 // Function to create task modifiers (buttons for modify, star, complete)
 function createTaskModifiers(task, index, category) {
     const taskModifiers = document.createElement('div');
@@ -90,8 +102,8 @@ function createTaskModifiers(task, index, category) {
             taskTitle.value = task.title;
             taskDescription.value = task.description;
             taskDate.value = task.time;
+            modifyingTaskIndex = index; // Set the global index for modification
         }
-        // assuming modifyingTaskIndex is handled in formPopup or globally
     });
 
     const starTask = document.createElement('img');
@@ -124,12 +136,13 @@ export function addUserTask(categoryName) {
     const taskDate = document.querySelector('#taskDate').value;
 
     const userTask = new Task(taskTitle, taskDate, taskDescription, false);
-    addTaskToArray(categoryName, userTask);
-    displayTaskAdder(categoryName); // Display the tasks after adding a new one
-}
 
-export const displayForm = () => {
-    const taskAddBtn = document.querySelector('.addTaskBtn');
-    taskAddBtn.addEventListener('click', (event) => formPopup(event));
-    console.log("Task Adding Btn Clicked")
-};
+    if (modifyingTaskIndex !== null) {
+        updateTaskInArray(categoryName, modifyingTaskIndex, userTask);
+        modifyingTaskIndex = null; // Reset modifyingTaskIndex after update
+    } else {
+        addTaskToArray(categoryName, userTask);
+    }
+
+    displayTaskAdder(categoryName); // Display the tasks after adding or modifying
+}

@@ -15,7 +15,7 @@ export function createTaskAddButton(categoryName) {
     return addTaskButton;
 }
 
-export function displayTaskAdder(name) {
+export function displayTaskAdder(categoryName, name) {
     console.log("Displaying task:", name);
     const taskTypes = document.querySelector('.taskTypes');
     if (!taskTypes) {
@@ -25,7 +25,7 @@ export function displayTaskAdder(name) {
 
     taskTypes.innerHTML = '';
     taskTypes.appendChild(createTaskHeader(name));
-    taskTypes.appendChild(createTaskAddButton(name));
+    taskTypes.appendChild(createTaskAddButton(categoryName));
 
     // Find the correct task data array
     let tasks;
@@ -39,7 +39,7 @@ export function displayTaskAdder(name) {
         case "Important":
             tasks = importantTasksData;
             break;
-        case "Weekly":
+        case "The next 7 days":
             tasks = weeklyTasksData;
             break;
         default:
