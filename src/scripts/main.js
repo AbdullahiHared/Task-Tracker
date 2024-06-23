@@ -1,35 +1,50 @@
 // imports
 import {renderAllTasksBtns} from './taskRender.js';
-// Define DOM elements
-let taskTypes;
-let todayTasks;
-let weekTasks;
-let allTasks;
-let starredTasks;
 
 // Define task filters
-export let taskFilterBtns =  [todayTasks, weekTasks, allTasks, starredTasks];
-
 document.addEventListener('DOMContentLoaded', () => {
-    taskTypes = document.querySelector('.taskTypes');
-    todayTasks = document.querySelector('.todayTasks');
-    weekTasks = document.querySelector('.weekTasks');
-    allTasks = document.querySelector('.allTasks');
-    starredTasks = document.querySelector('.starredTasks');
+    // Define DOM elements
+    let taskTypes = document.querySelector('.taskTypes');
+    let todayTasks = document.querySelector('.todayTasks');
+    let weekTasks = document.querySelector('.weekTasks');
+    let allTasks = document.querySelector('.allTasks');
+    let starredTasks = document.querySelector('.starredTasks');
+
+    // Define task filters
+    let taskFilterBtns = [todayTasks, weekTasks, allTasks, starredTasks];
+
+    const allCategories = [
+        {
+            btn: todayTasks,
+            name: "Today's Tasks",
+            categoryName: "Today"
+        },
+        {
+            btn: weekTasks,
+            name: "The Next 7 days",
+            categoryName: "Weekly"
+        },
+        {
+            btn: allTasks,
+            name: "All Tasks",
+            categoryName: "All Tasks"
+        },
+        {
+            btn: starredTasks,
+            name: "Starred Tasks",
+            categoryName: "Important"
+        }
+    ];
 
     // Add event listeners to task filters
-    taskFilters.forEach((taskFilter) => {
-        taskFilter.task.addEventListener('click', () => {
-            taskFilters.forEach((tf) => {
-                tf.task.classList.remove('activeTask');
+    taskFilterBtns.forEach((taskFilter) => {
+        taskFilter.addEventListener('click', () => {
+            taskFilterBtns.forEach((tf) => {
+                tf.classList.remove('activeTask');
             });
-            taskFilter.task.classList.add('activeTask');
-            console.log("Task clicked : ", taskFilter.name);
+            taskFilter.classList.add('activeTask');
+            console.log("Task clicked:", taskFilter.className);
         });
-
-        if (taskFilter.func) {
-            taskFilter.func();
-        };
     });
 
     // Add event listeners to icons (assuming they toggle active state)
@@ -49,7 +64,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     todayTasks.classList.add('activeTask');
-    renderAllTasksBtns();
+    renderAllTasksBtns(allCategories);
 });
-
-export { taskTypes, todayTasks, weekTasks, allTasks, starredTasks };
