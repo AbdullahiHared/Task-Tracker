@@ -1,9 +1,10 @@
 import { formPopup } from './taskForm.js';
-import { allTasksData, todayTasksData, importantTasksData, weeklyTasksData, createTaskElement } from './taskUtils.js';
+import { getTasksByCategory } from './taskUtils.js';
 
 export function createTaskHeader(name) {
     const taskHeader = document.createElement('h2');
     taskHeader.textContent = name;
+    console.log("Task header created:", name);
     return taskHeader;
 }
 
@@ -16,10 +17,10 @@ export function createTaskAddButton(categoryName) {
 }
 
 export function displayTaskAdder(categoryName, name) {
-    console.log("Displaying task:", name);
+    console.log("Displaying tasks for category:", name);
     const taskTypes = document.querySelector('.taskTypes');
     if (!taskTypes) {
-        console.error('Required elements not found');
+        console.error('Task types container not found');
         return;
     }
 
@@ -27,29 +28,20 @@ export function displayTaskAdder(categoryName, name) {
     taskTypes.appendChild(createTaskHeader(name));
     taskTypes.appendChild(createTaskAddButton(categoryName));
 
-    // Find the correct task data array
-    let tasks;
-    switch (name) {
-        case "All Tasks":
-            tasks = allTasksData;
-            break;
-        case "Today":
-            tasks = todayTasksData;
-            break;
-        case "Important":
-            tasks = importantTasksData;
-            break;
-        case "The next 7 days":
-            tasks = weeklyTasksData;
-            break;
-        default:
-            tasks = [];
-    }
+    // Get the correct task data array based on the category name
+    const tasks = getTasksByCategory(name);
 
     tasks.forEach((task, index) => {
         const taskElement = createTaskElement(task, index, tasks);
         taskTypes.appendChild(taskElement);
     });
+}
 
-    taskTypes.classList.add('activeTask');
+// Assume this function is defined elsewhere to create a task element
+function createTaskElement(task, index, tasks) {
+    const taskElement = document.createElement('div');
+    taskElement.classList.add('task-item');
+    taskElement.textContent = `${task.title} - ${task.description} - ${task.time}`;
+    // Add other properties and event listeners as needed
+    return taskElement;
 }

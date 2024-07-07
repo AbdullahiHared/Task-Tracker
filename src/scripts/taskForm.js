@@ -1,78 +1,68 @@
-import { addTaskToArray, removeTaskFromArray } from './taskUtils.js';
-import { addUserTask } from './taskUtils.js';
+import { addTaskToArray,  addUserTask } from './taskUtils.js';
 
 let modifyingTaskIndex = null;
 
+function createInputElement(type, id, placeholder, value = '', required = false) {
+    const input = document.createElement('input');
+    input.setAttribute('type', type);
+    input.setAttribute('id', id);
+    input.setAttribute('placeholder', placeholder);
+    if (value) input.setAttribute('value', value);
+    if (required) input.setAttribute('required', true);
+    return input;
+}
+
+function createButtonElement(text, className) {
+    const button = document.createElement('button');
+    button.textContent = text;
+    button.classList.add(className);
+    return button;
+}
+
 export function formPopup(categoryName) {
-    let formPopupElement = document.querySelector('.form-popup');
-    if (!formPopupElement) {
-        formPopupElement = document.createElement('form');
-        formPopupElement.classList.add('form-popup');
-        
+    let formPopup = document.querySelector('.form-popup');
+    if (!formPopup) {
+        formPopup = document.createElement('form');
+        formPopup.classList.add('form-popup');
         const formContainer = document.createElement('div');
         formContainer.classList.add('form-container');
-        formPopupElement.appendChild(formContainer);
+        formPopup.appendChild(formContainer);
 
-        const inputTitle = document.createElement('input');
-        inputTitle.setAttribute('type', 'text');
-        inputTitle.setAttribute('placeholder', 'Task Name');
-        inputTitle.setAttribute('id', 'taskTitle');
-        inputTitle.setAttribute('required', true);
+        const inputTitle = createInputElement('text', 'taskTitle', 'Task Name', '', true);
         formContainer.appendChild(inputTitle);
 
-        const descriptionInput = document.createElement('input');
-        descriptionInput.setAttribute('type', 'text');
-        descriptionInput.setAttribute('placeholder', 'Description');
-        descriptionInput.setAttribute('id', 'taskDescription');
+        const descriptionInput = createInputElement('text', 'taskDescription', 'Description');
         formContainer.appendChild(descriptionInput);
 
-        const inputDate = document.createElement('input');
-        inputDate.setAttribute('type', 'time');
-        inputDate.setAttribute('value', '13:58');
-        inputDate.setAttribute('id', 'taskDate');
-        inputDate.setAttribute('required', true);
+        const inputDate = createInputElement('time', 'taskDate', '', '13:58', true);
         formContainer.appendChild(inputDate);
 
-        const submitBtn = document.createElement('button');
-        submitBtn.textContent = "Add task";
-        submitBtn.classList.add('submitBtn');
+        const submitBtn = createButtonElement('Add task', 'submitBtn');
         formContainer.appendChild(submitBtn);
 
-        const cancelBtn = document.createElement('button');
-        cancelBtn.textContent = "Cancel";
-        cancelBtn.classList.add('cancelBtn');
+        const cancelBtn = createButtonElement('Cancel', 'cancelBtn');
         formContainer.appendChild(cancelBtn);
 
         cancelBtn.addEventListener('click', () => {
-            formPopupElement.classList.remove('show');
-            clearFormInputs();
+            formPopup.classList.toggle('show');
+            inputTitle.value = "";
+            descriptionInput.value = "";
+            inputDate.value = "";
         });
 
-        formPopupElement.addEventListener('submit', (event) => {
+        formPopup.addEventListener('submit', (event) => {
             event.preventDefault();
             if (modifyingTaskIndex !== null) {
-                removeTaskFromArray(categoryName, modifyingTaskIndex);
+                addTaskToArray(categoryName, modifyingTaskIndex, true);
                 modifyingTaskIndex = null;
             }
             addUserTask(categoryName);
-            formPopupElement.classList.remove('show');
-            clearFormInputs();
+            formPopup.classList.remove('show'); // Hide form after submission
         });
 
         const taskTypes = document.querySelector('.taskTypes');
-        taskTypes.appendChild(formPopupElement);
+        taskTypes.appendChild(formPopup);
     }
 
-    formPopupElement.classList.toggle('show');
-}
-
-function clearFormInputs() {
-    const inputTitle = document.querySelector('#taskTitle');
-    const descriptionInput = document.querySelector('#taskDescription');
-    const inputDate = document.querySelector('#taskDate');
-    if (inputTitle && descriptionInput && inputDate) {
-        inputTitle.value = "";
-        descriptionInput.value = "";
-        inputDate.value = "13:58"; // Reset to default time
-    }
+    formPopup.classList.toggle('show');
 }
