@@ -23,21 +23,18 @@ export function displayTaskAdder(categoryName, name) {
         console.error('Task types container not found');
         return;
     }
-
     taskTypes.innerHTML = '';
     taskTypes.appendChild(createTaskHeader(name));
     taskTypes.appendChild(createTaskAddButton(categoryName));
-
     // Get the correct task data array based on the category name
     const tasks = getTasksByCategory(name);
-
     tasks.forEach((task, index) => {
         const taskElement = createTaskElement(task, index, tasks);
         taskTypes.appendChild(taskElement);
     });
 }
 
-// Assume this function is defined elsewhere to create a task element
+// Corrected function definition
 function createTaskElement(task, index, tasks) {
     const taskElement = document.createElement('div');
     taskElement.classList.add('task-item');

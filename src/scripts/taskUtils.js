@@ -1,10 +1,8 @@
-import {displayTaskAdder} from "./taskDisplay.js";
-import {formPopup} from "./taskForm.js";
-
-let modifyingTaskIndex = null;
 // Task class
+import {displayTaskAdder} from "./taskDisplay.js";
+
 class Task {
-    constructor(title, time, description, starred) {
+    constructor(title, time, description, starred = false) {
         this.title = title;
         this.time = time;
         this.description = description;
@@ -19,27 +17,34 @@ export const importantTasksData = [];
 export const weeklyTasksData = [];
 
 const taskData = [
-    {name: "All Tasks", data: allTasksData},
-    {name: "Today", data: todayTasksData},
-    {name: "Important", data: importantTasksData},
-    {name: "Weekly", data: weeklyTasksData}
+    { name: "All Tasks", data: allTasksData },
+    { name: "Today", data: todayTasksData },
+    { name: "Important", data: importantTasksData },
+    { name: "Weekly", data: weeklyTasksData }
 ];
 
 // Function to add a task to an array and allTasks
-export function addTaskToArray(categoryName, task) {
-    const category = taskData.find((taskCategory) => taskCategory.name === categoryName);
-    if (category) {
-        category.data.push(task);
-    }
-    allTasksData.push(task); // Add to allTasks as well
+export function addTaskToArray(dataName, userTask) {
+    taskData.forEach((taskCategory) => {
+        if (taskCategory.name === dataName) {
+            taskCategory.data.push(userTask);
+        }
+    });
+    allTasksData.push(userTask); // Add to allTasks as well
 }
 
 // Function to remove a task from an array
-export function removeTaskFromArray(categoryName, index) {
-    const category = taskData.find((taskCategory) => taskCategory.name === categoryName);
-    if (category) {
-        category.data.splice(index, 1);
-    }
+export function removeTaskFromArray(dataName, index) {
+    taskData.forEach((taskCategory) => {
+        if (taskCategory.name === dataName) {
+            taskCategory.data.splice(index, 1);
+        }
+    });
+}
+
+// Function to get tasks by category name
+export function getTasksByCategory(categoryName) {
+    return taskData.find(category => category.name === categoryName)?.data || [];
 }
 
 // Function to create a task element
@@ -78,59 +83,45 @@ function createTaskModifiers(task, index, category) {
     const taskModifiers = document.createElement('div');
     taskModifiers.classList.add('taskModifiers');
 
-    const modifyTaskButton = createModifierButton("./images/editTask.svg", 'modifyTask', () => {
-        handleModifyTask(category.name, task, index);
+    const modifyTask = document.createElement('img');
+    modifyTask.src = "./images/editTask.svg";
+    modifyTask.classList.add('modifyTask');
+    modifyTask.addEventListener('click', () => {
+        formPopup(category.name); // Pass the category name
+        const taskTitle = document.querySelector('#taskTitle');
+        const taskDescription = document.querySelector('#taskDescription');
+        const taskDate = document.querySelector('#taskDate');
+        if (taskTitle && taskDescription && taskDate) {
+            taskTitle.value = task.title;
+            taskDescription.value = task.description;
+            taskDate.value = task.time;
+        }
+        // assuming modifyingTaskIndex is handled in formPopup or globally
     });
 
-    const starTaskButton = createModifierButton("./images/taskStar.svg", 'starTask', () => {
-        handleStarTask(category.name, task);
+    const starTask = document.createElement('img');
+    starTask.src = "./images/taskStar.svg";
+    starTask.classList.add('starTask');
+    starTask.addEventListener('click', () => {
+        console.log("Star task");
+        addTaskToArray("Important", task); // Add to importantTasksData
+        task.starred = !task.starred;
+        displayTaskAdder(category.name);
     });
 
-    const completeTaskButton = createModifierButton("./images/completeTask.svg", 'completeTask', () => {
-        handleCompleteTask(category.name, index);
+    const completeTask = document.createElement('img');
+    completeTask.src = "./images/completeTask.svg";
+    completeTask.classList.add('completeTask');
+    completeTask.addEventListener('click', () => {
+        removeTaskFromArray(category.name, index);
+        displayTaskAdder(category.name);
     });
 
-    taskModifiers.appendChild(modifyTaskButton);
-    taskModifiers.appendChild(starTaskButton);
-    taskModifiers.appendChild(completeTaskButton);
+    taskModifiers.appendChild(starTask);
+    taskModifiers.appendChild(completeTask);
+    taskModifiers.appendChild(modifyTask);
 
     return taskModifiers;
-}
-
-// Helper function to create a modifier button
-function createModifierButton(src, className, onClick) {
-    const button = document.createElement('img');
-    button.src = src;
-    button.classList.add(className);
-    button.addEventListener('click', onClick);
-    return button;
-}
-
-// Function to handle modifying a task
-function handleModifyTask(categoryName, task, index) {
-    formPopup(categoryName);
-    const taskTitle = document.querySelector('#taskTitle');
-    const taskDescription = document.querySelector('#taskDescription');
-    const taskDate = document.querySelector('#taskDate');
-    if (taskTitle && taskDescription && taskDate) {
-        taskTitle.value = task.title;
-        taskDescription.value = task.description;
-        taskDate.value = task.time;
-    }
-    modifyingTaskIndex = index; // Assuming modifyingTaskIndex is handled globally
-}
-
-// Function to handle starring a task
-function handleStarTask(categoryName, task) {
-    addTaskToArray("Important", task); // Add to importantTasksData
-    task.starred = !task.starred;
-    displayTaskAdder(categoryName);
-}
-
-// Function to handle completing a task
-function handleCompleteTask(categoryName, index) {
-    removeTaskFromArray(categoryName, index);
-    displayTaskAdder(categoryName);
 }
 
 // Function to add a user task
@@ -144,18 +135,3 @@ export function addUserTask(categoryName) {
     displayTaskAdder(categoryName); // Display the tasks after adding a new one
 }
 
-// Function to get tasks by category
-export function getTasksByCategory(name) {
-    switch (name) {
-        case "All Tasks":
-            return allTasksData;
-        case "Today":
-            return todayTasksData;
-        case "Important":
-            return importantTasksData;
-        case "Weekly":
-            return weeklyTasksData;
-        default:
-            return [];
-    }
-}

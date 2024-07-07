@@ -1,4 +1,4 @@
-import { addTaskToArray,  addUserTask } from './taskUtils.js';
+import { addTaskToArray, addUserTask } from './taskUtils.js';
 
 let modifyingTaskIndex = null;
 
@@ -43,7 +43,8 @@ export function formPopup(categoryName) {
         const cancelBtn = createButtonElement('Cancel', 'cancelBtn');
         formContainer.appendChild(cancelBtn);
 
-        cancelBtn.addEventListener('click', () => {
+        cancelBtn.addEventListener('click', (event) => {
+            event.preventDefault();
             formPopup.classList.toggle('show');
             inputTitle.value = "";
             descriptionInput.value = "";
@@ -52,17 +53,24 @@ export function formPopup(categoryName) {
 
         formPopup.addEventListener('submit', (event) => {
             event.preventDefault();
+            if (!inputTitle.value || !inputDate.value) {
+                alert("Please fill in all required fields.");
+                return;
+            }
             if (modifyingTaskIndex !== null) {
                 addTaskToArray(categoryName, modifyingTaskIndex, true);
                 modifyingTaskIndex = null;
+            } else {
+                addUserTask(categoryName);
             }
-            addUserTask(categoryName);
             formPopup.classList.remove('show'); // Hide form after submission
+            inputTitle.value = "";
+            descriptionInput.value = "";
+            inputDate.value = "13:58"; // Reset to default or use a function to set current time
         });
 
         const taskTypes = document.querySelector('.taskTypes');
         taskTypes.appendChild(formPopup);
     }
-
     formPopup.classList.toggle('show');
 }
