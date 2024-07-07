@@ -1,54 +1,38 @@
-import { renderAllTaskButtons } from "./taskRender.js";
+// imports
+import {renderAllTasksBtns} from './taskRender.js';
+// Define DOM elements
+let taskTypes;
+let todayTasks;
+let weekTasks;
+let allTasks;
+let starredTasks;
+
+// Define task filters
+export let taskFilterBtns =  [todayTasks, weekTasks, allTasks, starredTasks];
 
 document.addEventListener('DOMContentLoaded', () => {
-    const taskFilters = setupTaskFilters();
-    setupTaskFilterListeners(taskFilters);
-    setupIconListeners();
-});
+    taskTypes = document.querySelector('.taskTypes');
+    todayTasks = document.querySelector('.todayTasks');
+    weekTasks = document.querySelector('.weekTasks');
+    allTasks = document.querySelector('.allTasks');
+    starredTasks = document.querySelector('.starredTasks');
 
-// Function to set up task filters
-function setupTaskFilters() {
-    return [
-        {
-            task: document.querySelector('.todayTasks'),
-            name: "Today"
-        },
-        {
-            task: document.querySelector('.weekTasks'),
-            name: "The next 7 days"
-        },
-        {
-            task: document.querySelector('.allTasks'),
-            name: "All Tasks"
-        },
-        {
-            task: document.querySelector('.starredTasks'),
-            name: "Important"
-        }
-    ];
-}
-
-// Function to set up task filter listeners
-function setupTaskFilterListeners(taskFilters) {
+    // Add event listeners to task filters
     taskFilters.forEach((taskFilter) => {
         taskFilter.task.addEventListener('click', () => {
-            handleTaskFilterClick(taskFilter, taskFilters);
+            taskFilters.forEach((tf) => {
+                tf.task.classList.remove('activeTask');
+            });
+            taskFilter.task.classList.add('activeTask');
+            console.log("Task clicked : ", taskFilter.name);
         });
-    });
-}
 
-// Function to handle task filter click events
-function handleTaskFilterClick(clickedFilter, taskFilters) {
-    taskFilters.forEach((taskFilter) => {
-        taskFilter.task.classList.remove('activeTask');
+        if (taskFilter.func) {
+            taskFilter.func();
+        };
     });
-    clickedFilter.task.classList.add('activeTask');
-    console.log("Task clicked:", clickedFilter.name);
-    renderAllTaskButtons(taskFilters);
-}
 
-// Function to set up icon listeners
-function setupIconListeners() {
+    // Add event listeners to icons (assuming they toggle active state)
     const todayIcon = document.querySelector('.todayTasks img');
     const allIcon = document.querySelector('.allTasks img');
     const starredIcon = document.querySelector('.starredTasks img');
@@ -57,15 +41,15 @@ function setupIconListeners() {
     const icons = [todayIcon, allIcon, starredIcon, weekIcon];
     icons.forEach((icon) => {
         icon.addEventListener('click', () => {
-            handleIconClick(icon, icons);
+            icons.forEach((i) => {
+                i.classList.remove('activeIcon');
+            });
+            icon.classList.add('activeIcon');
         });
     });
-}
 
-// Function to handle icon click events
-function handleIconClick(clickedIcon, icons) {
-    icons.forEach((icon) => {
-        icon.classList.remove('activeIcon');
-    });
-    clickedIcon.classList.add('activeIcon');
-}
+    todayTasks.classList.add('activeTask');
+    renderAllTasksBtns();
+});
+
+export { taskTypes, todayTasks, weekTasks, allTasks, starredTasks };

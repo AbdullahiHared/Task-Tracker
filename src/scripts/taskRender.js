@@ -1,10 +1,35 @@
-import { displayTaskAdder } from "./taskDisplay.js";
+import {taskFilterBtns} from "./main.js";
+import {displayTaskAdder} from "./taskDisplay.js";
+import {taskTypes} from "./main.js";
 
-// Function to render all task buttons by displaying their corresponding task lists
-export function renderAllTaskButtons(categories) {
-    categories.forEach((category) => {
-        category.task.addEventListener('click', () => {
-            displayTaskAdder(category.name, category.name);
+const allCategories = [
+    {
+        btn: taskFilterBtns[0],
+        name: "Today's Tasks",
+        categoryName: "Today"
+    },
+    {
+        btn: taskFilterBtns[1],
+        name: "The Next 7 days",
+        categoryName: "Weekly"
+    },
+    {
+        btn: taskFilterBtns[2],
+        name: "All Tasks",
+        categoryName: "All Tasks"
+    },
+    {
+        btn: taskFilterBtns[3],
+        name: "Starred Tasks",
+        categoryName: "Important"
+    }
+];
+
+export function renderAllTasksBtns() {
+    allCategories.forEach((category) => {
+        category.btn.addEventListener('click', () => {
+            taskTypes.innerHTML = '';
+            displayTaskAdder(category.name, category.categoryName);
         });
     });
 }
