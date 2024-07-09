@@ -1,4 +1,4 @@
-import { addTaskToArray, addUserTask } from './taskUtils.js';
+import {addTaskToArray, addUserTask} from './taskUtils.js';
 
 let modifyingTaskIndex = null;
 
@@ -7,7 +7,7 @@ function createInputElement(type, id, placeholder, value = '', required = false)
     input.setAttribute('type', type);
     input.setAttribute('id', id);
     input.setAttribute('placeholder', placeholder);
-    if (value) input.setAttribute('value', value);
+    if (value) input.value = value; // Set value directly
     if (required) input.setAttribute('required', true);
     return input;
 }
@@ -34,7 +34,7 @@ export function formPopup(categoryName) {
         const descriptionInput = createInputElement('text', 'taskDescription', 'Description');
         formContainer.appendChild(descriptionInput);
 
-        const inputDate = createInputElement('time', 'taskDate', '', '13:58', true);
+        const inputDate = createInputElement('date', 'taskDate', '', '', true);
         formContainer.appendChild(inputDate);
 
         const submitBtn = createButtonElement('Add task', 'submitBtn');
@@ -48,7 +48,7 @@ export function formPopup(categoryName) {
             formPopup.classList.toggle('show');
             inputTitle.value = "";
             descriptionInput.value = "";
-            inputDate.value = "";
+            inputDate.value = ""; // Reset to default
         });
 
         formPopup.addEventListener('submit', (event) => {
@@ -66,11 +66,27 @@ export function formPopup(categoryName) {
             formPopup.classList.remove('show'); // Hide form after submission
             inputTitle.value = "";
             descriptionInput.value = "";
-            inputDate.value = "13:58"; // Reset to default or use a function to set current time
+            inputDate.value = ""; // Reset to default
         });
 
         const taskTypes = document.querySelector('.taskTypes');
         taskTypes.appendChild(formPopup);
+    } else {
+        // If formPopup already exists, reset the date input
+        const inputDate = formPopup.querySelector('#taskDate');
+        inputDate.value = ''; // Clear any previous value
     }
+
+    // Set today's date as default if category is 'Today'
+    defaultCategory(categoryName);
+
     formPopup.classList.toggle('show');
+}
+
+function defaultCategory (categoryName) {
+    const inputDate = document.querySelector('#taskDate');
+    if (categoryName === 'Today') {
+        inputDate.value = new Date().toISOString().split('T')[0];
+    }
+
 }

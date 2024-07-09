@@ -1,10 +1,11 @@
 // Task class
 import {displayTaskAdder} from "./taskDisplay.js";
+import {formPopup} from "./taskForm.js";
 
 class Task {
-    constructor(title, time, description, starred = false) {
+    constructor(title, date, description, starred = false) {
         this.title = title;
-        this.time = time;
+        this.date = date;
         this.description = description;
         this.starred = starred;
     }
@@ -27,11 +28,22 @@ const taskData = [
 export function addTaskToArray(dataName, userTask) {
     taskData.forEach((taskCategory) => {
         if (taskCategory.name === dataName) {
-            taskCategory.data.push(userTask);
+            const existingIndex = taskCategory.data.findIndex(task => task.title === userTask.title && task.date === userTask.date && task.description === userTask.description);
+            if (existingIndex === -1) {
+                taskCategory.data.push(userTask); // Add the task if it doesn't already exist
+            } else {
+                taskCategory.data[existingIndex] = userTask; // Update the existing task
+            }
         }
     });
-    allTasksData.push(userTask); // Add to allTasks as well
+    const allTasksIndex = allTasksData.findIndex(task => task.title === userTask.title && task.date === userTask.date && task.description === userTask.description);
+    if (allTasksIndex === -1) {
+        allTasksData.push(userTask); // Add to allTasks if it's a new task
+    } else {
+        allTasksData[allTasksIndex] = userTask; // Update the existing task in allTasks
+    }
 }
+
 
 // Function to remove a task from an array
 export function removeTaskFromArray(dataName, index) {
@@ -47,22 +59,25 @@ export function getTasksByCategory(categoryName) {
     return taskData.find(category => category.name === categoryName)?.data || [];
 }
 
+
 // Function to create a task element
 export function createTaskElement(task, index, category) {
     const taskItem = document.createElement('div');
     taskItem.classList.add('taskItem');
 
     const title = document.createElement('h3');
+    title.classList.add('taskTitle');
     const taskDescription = document.createElement('h5');
-    const taskTime = document.createElement('p');
+    taskDescription.classList.add('taskDescription');
+    const taskDate = document.createElement('p');
+    taskDate.classList.add('taskDate');
 
     title.textContent = task.title;
     taskDescription.textContent = task.description;
-    taskTime.textContent = formatTime(task.time);
-
+    taskDate.textContent = task.date;
     taskItem.appendChild(title);
     taskItem.appendChild(taskDescription);
-    taskItem.appendChild(taskTime);
+    taskItem.appendChild(taskDate);
 
     const taskModifiers = createTaskModifiers(task, index, category);
     taskItem.appendChild(taskModifiers);
@@ -70,16 +85,8 @@ export function createTaskElement(task, index, category) {
     return taskItem;
 }
 
-// Helper function to format time from 24-hour to 12-hour format
-function formatTime(time) {
-    const [hour, minute] = time.split(':').map(Number);
-    const period = hour >= 12 ? 'PM' : 'AM';
-    const formattedHour = hour % 12 || 12;
-    return `${formattedHour}:${minute.toString().padStart(2, '0')} ${period}`;
-}
-
 // Function to create task modifiers (buttons for modify, star, complete)
-function createTaskModifiers(task, index, category) {
+export function createTaskModifiers(task, index, category) {
     const taskModifiers = document.createElement('div');
     taskModifiers.classList.add('taskModifiers');
 
@@ -87,16 +94,17 @@ function createTaskModifiers(task, index, category) {
     modifyTask.src = "./images/editTask.svg";
     modifyTask.classList.add('modifyTask');
     modifyTask.addEventListener('click', () => {
-        formPopup(category.name); // Pass the category name
+        formPopup(category.name); // Open form popup for editing
+        // Populate form fields with task details
         const taskTitle = document.querySelector('#taskTitle');
         const taskDescription = document.querySelector('#taskDescription');
         const taskDate = document.querySelector('#taskDate');
         if (taskTitle && taskDescription && taskDate) {
             taskTitle.value = task.title;
             taskDescription.value = task.description;
-            taskDate.value = task.time;
+            taskDate.value = task.date;
         }
-        // assuming modifyingTaskIndex is handled in formPopup or globally
+        // You might need to manage modifyingTaskIndex here if it's not handled globally
     });
 
     const starTask = document.createElement('img');
@@ -117,12 +125,13 @@ function createTaskModifiers(task, index, category) {
         displayTaskAdder(category.name);
     });
 
+    taskModifiers.appendChild(modifyTask);
     taskModifiers.appendChild(starTask);
     taskModifiers.appendChild(completeTask);
-    taskModifiers.appendChild(modifyTask);
 
     return taskModifiers;
 }
+
 
 // Function to add a user task
 export function addUserTask(categoryName) {

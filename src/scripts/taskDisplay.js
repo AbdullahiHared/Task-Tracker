@@ -1,5 +1,7 @@
 import { formPopup } from './taskForm.js';
-import { getTasksByCategory } from './taskUtils.js';
+import { getTasksByCategory, createTaskModifiers} from './taskUtils.js';
+import { createTaskElement } from './taskUtils.js';
+
 
 export function createTaskHeader(name) {
     const taskHeader = document.createElement('h2');
@@ -34,11 +36,4 @@ export function displayTaskAdder(categoryName, name) {
     });
 }
 
-// Corrected function definition
-function createTaskElement(task, index, tasks) {
-    const taskElement = document.createElement('div');
-    taskElement.classList.add('task-item');
-    taskElement.textContent = `${task.title} - ${task.description} - ${task.time}`;
-    // Add other properties and event listeners as needed
-    return taskElement;
-}
+
