@@ -1,8 +1,9 @@
-import {addTaskToArray, addUserTask} from './taskUtils.js';
+import {addTaskToArray, addUserTask} from "./taskUtils.js";
+import { displayTaskAdder } from "./taskDisplay.js";
 
 let modifyingTaskIndex = null;
 
-function createInputElement(type, id, placeholder, value = '', required = false) {
+export function createInputElement(type, id, placeholder, value = '', required = false) {
     const input = document.createElement('input');
     input.setAttribute('type', type);
     input.setAttribute('id', id);
@@ -12,7 +13,7 @@ function createInputElement(type, id, placeholder, value = '', required = false)
     return input;
 }
 
-function createButtonElement(text, className) {
+export function createButtonElement(text, className) {
     const button = document.createElement('button');
     button.textContent = text;
     button.classList.add(className);
@@ -62,6 +63,7 @@ export function formPopup(categoryName) {
                 modifyingTaskIndex = null;
             } else {
                 addUserTask(categoryName);
+                displayTaskAdder(categoryName, categoryName);
             }
             formPopup.classList.remove('show'); // Hide form after submission
             inputTitle.value = "";
@@ -85,7 +87,7 @@ export function formPopup(categoryName) {
 
 function defaultCategory (categoryName) {
     const inputDate = document.querySelector('#taskDate');
-    if (categoryName === 'Today') {
+    if (categoryName === 'Urgent') {
         inputDate.value = new Date().toISOString().split('T')[0];
     }
 
