@@ -244,33 +244,52 @@ button:hover {
 .taskModifiers {
     display: flex;
     gap: 10px;
+    justify-content: flex-end;
 }
 
-.taskModifiers button {
-    padding: 5px 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
+.taskModifiers img:hover {
     cursor: pointer;
-    margin-right: 10px;
 }
 
-.taskModifiers button.modifyTaskBtn {
-    background-color: #f0ad4e;
-}
-
-.taskModifiers button.starTaskBtn {
-    background-color: #f0ad4e;
-}
-
-.taskModifiers button.completeTaskBtn {
-    background-color: #d9534f;
-}
 
 .tasksContainer {
     display: flex;
     flex-direction: column;
     gap: 10px;
     overflow-x: auto;
+}
+
+.taskItem {
+    display: flex;
+    flex-direction: column;
+    background-color: #333;
+    color: #fff;
+    border-radius: 5px;
+    gap: 10px;
+    overflow-x: auto;
+
+    height: auto;
+}
+
+.taskItem h3 {
+    margin: 5px 0;
+    font-size: 1.2em;
+}
+
+.taskItem .taskDescription {
+    margin: 5px 0;
+    font-weight:100;
+    font-size:1em;
+}
+
+.taskItem .taskDate {
+    margin: 5px 0;
+    font-size: 0.8em;
+}
+
+.addProject {
+    color: #c2bdbd;
+    font-weight: inherit;
+    font-size: 4rem;
+    cursor: pointer;
 }
