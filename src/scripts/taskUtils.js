@@ -1,6 +1,6 @@
-// Task class
-import {displayTaskAdder} from "./taskDisplay.js";
-import {formPopup} from "./taskForm.js";
+import { displayTaskAdder } from "./taskDisplay.js";
+import { formPopup } from "./taskForm.js";
+import { currentCategory } from "./taskDisplay.js";
 
 class Task {
     constructor(title, date, description, starred = false) {
@@ -13,15 +13,15 @@ class Task {
 
 // Set up the task data arrays
 export const allTasksData = [];
-export const todayTasksData = [];
+export const urgentTasksData = [];
 export const importantTasksData = [];
-export const weeklyTasksData = [];
+export const upComingTasksData = [];
 
 const taskData = [
     { name: "All Tasks", data: allTasksData },
-    { name: "Today", data: todayTasksData },
+    { name: "Urgent", data: urgentTasksData },
     { name: "Important", data: importantTasksData },
-    { name: "Weekly", data: weeklyTasksData }
+    { name: "Up coming", data: upComingTasksData }
 ];
 
 // Function to add a task to an array and allTasks
@@ -36,6 +36,7 @@ export function addTaskToArray(dataName, userTask) {
             }
         }
     });
+
     const allTasksIndex = allTasksData.findIndex(task => task.title === userTask.title && task.date === userTask.date && task.description === userTask.description);
     if (allTasksIndex === -1) {
         allTasksData.push(userTask); // Add to allTasks if it's a new task
@@ -44,12 +45,15 @@ export function addTaskToArray(dataName, userTask) {
     }
 }
 
-
 // Function to remove a task from an array
-export function removeTaskFromArray(dataName, index) {
+export function removeTaskFromArray(dataName, taskToRemove) {
     taskData.forEach((taskCategory) => {
         if (taskCategory.name === dataName) {
-            taskCategory.data.splice(index, 1);
+            const index = taskCategory.data.findIndex(task => task.title === taskToRemove.title && task.date === taskToRemove.date && task.description === taskToRemove.description);
+            if (index > -1) {
+                console.log(`Removing task at index ${index} from ${dataName}`);
+                taskCategory.data.splice(index, 1);
+            }
         }
     });
 }
@@ -58,7 +62,6 @@ export function removeTaskFromArray(dataName, index) {
 export function getTasksByCategory(categoryName) {
     return taskData.find(category => category.name === categoryName)?.data || [];
 }
-
 
 // Function to create a task element
 export function createTaskElement(task, index, category) {
@@ -85,43 +88,54 @@ export function createTaskElement(task, index, category) {
     return taskItem;
 }
 
-// Function to create task modifiers (buttons for modify, star, complete)
+let modifyingTask = null; // Track the task being modified
+let modifyingCategory = null; // Track the category of the task being modified
+
 export function createTaskModifiers(task, index, category) {
     const taskModifiers = document.createElement('div');
     taskModifiers.classList.add('taskModifiers');
+    const currentCategory = document.querySelector('.taskHeader').textContent;
 
+    // Modify Task Button
     const modifyTask = document.createElement('img');
     modifyTask.src = "./images/editTask.svg";
     modifyTask.classList.add('modifyTask');
     modifyTask.addEventListener('click', () => {
-        formPopup(category.name); // Open form popup for editing
-        // Populate form fields with task details
-        const taskTitle = document.querySelector('#taskTitle');
-        const taskDescription = document.querySelector('#taskDescription');
-        const taskDate = document.querySelector('#taskDate');
-        if (taskTitle && taskDescription && taskDate) {
-            taskTitle.value = task.title;
-            taskDescription.value = task.description;
-            taskDate.value = task.date;
-        }
-        // You might need to manage modifyingTaskIndex here if it's not handled globally
+        console.log("Modify task");
+        console.log("Current Category:", currentCategory);
+        formPopup(currentCategory);
+        document.querySelector('#taskTitle').value = task.title;
+        document.querySelector('#taskDescription').value = task.description;
+        document.querySelector('#taskDate').value = task.date;
+        modifyingTask = task;
+        modifyingCategory = currentCategory;
+        removeTaskFromArray(currentCategory, task);
+        removeTaskFromArray("All Tasks", task);
     });
 
+    // Star Task Button
     const starTask = document.createElement('img');
     starTask.src = "./images/taskStar.svg";
     starTask.classList.add('starTask');
     starTask.addEventListener('click', () => {
-        console.log("Star task");
-        addTaskToArray("Important", task); // Add to importantTasksData
+        console.log("Star task", task);
         task.starred = !task.starred;
+        if (task.starred) {
+            addTaskToArray("Important", task);
+        } else {
+            removeTaskFromArray("Important", task);
+        }
         displayTaskAdder(category.name);
     });
 
+    // Complete Task Button
     const completeTask = document.createElement('img');
     completeTask.src = "./images/completeTask.svg";
     completeTask.classList.add('completeTask');
     completeTask.addEventListener('click', () => {
-        removeTaskFromArray(category.name, index);
+        console.log("Complete task", task);
+        removeTaskFromArray(currentCategory, task);
+        removeTaskFromArray("All Tasks", task);
         displayTaskAdder(category.name);
     });
 
@@ -132,7 +146,6 @@ export function createTaskModifiers(task, index, category) {
     return taskModifiers;
 }
 
-
 // Function to add a user task
 export function addUserTask(categoryName) {
     const taskTitle = document.querySelector('#taskTitle').value;
@@ -140,7 +153,29 @@ export function addUserTask(categoryName) {
     const taskDate = document.querySelector('#taskDate').value;
 
     const userTask = new Task(taskTitle, taskDate, taskDescription, false);
+
+    if (modifyingTask) {
+        console.log("Modifying task:", modifyingTask);
+        removeTaskFromArray(modifyingCategory, modifyingTask);
+        removeTaskFromArray("All Tasks", modifyingTask);
+        modifyingTask = null;
+        modifyingCategory = null;
+    }
+
     addTaskToArray(categoryName, userTask);
     displayTaskAdder(categoryName); // Display the tasks after adding a new one
 }
 
+//  function to check current category
+function checkCurrentCategory(categoryName) {
+    switch (categoryName) {
+        case "Urgent":
+            console.log("Current Category:", + "Urgent");
+        case "Important":
+            console.log("Current Category:", + "Important");    
+        case "Upcoming":
+            console.log("Current Category:", + "Upcoming");
+        default:
+          console.warn("Current category could not be found");
+    }
+}
