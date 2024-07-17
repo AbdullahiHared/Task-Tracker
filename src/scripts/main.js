@@ -1,9 +1,12 @@
 import { renderAllTaskButtons } from "./taskRender.js";
+import { addProjectElements } from "./projectUtils.js";
 
 document.addEventListener('DOMContentLoaded', () => {
+    addProjectElements();
     const taskFilters = setupTaskFilters();
     setupTaskFilterListeners(taskFilters);
     setupIconListeners();
+    renderAllTaskButtons(taskFilters); // Initial render to ensure buttons are set up
 });
 
 // Function to set up task filters
@@ -11,11 +14,11 @@ function setupTaskFilters() {
     return [
         {
             task: document.querySelector('.todayTasks'),
-            name: "Today"
+            name: "Urgent"
         },
         {
             task: document.querySelector('.weekTasks'),
-            name: "The next 7 days"
+            name: "Up coming"
         },
         {
             task: document.querySelector('.allTasks'),
@@ -39,22 +42,16 @@ function setupTaskFilterListeners(taskFilters) {
 
 // Function to handle task filter click events
 function handleTaskFilterClick(clickedFilter, taskFilters) {
+    renderAllTaskButtons(taskFilters); // Update the task buttons based on the clicked filter
     taskFilters.forEach((taskFilter) => {
         taskFilter.task.classList.remove('activeTask');
     });
     clickedFilter.task.classList.add('activeTask');
-    console.log("Task clicked:", clickedFilter.name);
-    renderAllTaskButtons(taskFilters); // Update the task buttons based on the clicked filter
 }
 
 // Function to set up icon listeners
 function setupIconListeners() {
-    const todayIcon = document.querySelector('.todayTasks img');
-    const allIcon = document.querySelector('.allTasks img');
-    const starredIcon = document.querySelector('.starredTasks img');
-    const weekIcon = document.querySelector('.weekTasks img');
-
-    const icons = [todayIcon, allIcon, starredIcon, weekIcon];
+    const icons = document.querySelectorAll('.todayTasks img, .allTasks img, .starredTasks img, .weekTasks img');
     icons.forEach((icon) => {
         icon.addEventListener('click', () => {
             handleIconClick(icon, icons);
