@@ -1,5 +1,5 @@
 import { createButtonElement, createInputElement } from './taskForm.js';
-import { addTaskToArray, removeTaskFromArray } from './taskUtils.js';
+import { addTaskToArray, removeTaskFromArray, allTasksData } from './taskUtils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     addProjectElements();    // Attaches click listeners to add new projects
@@ -30,6 +30,7 @@ export function addTaskToProject(newTask, projectName) {
             allProjectsData.projects[projectIndex].tasks = [];
         }
         allProjectsData.projects[projectIndex].tasks.push(newTask);
+        allTasksData.push(newTask);
         console.log(`Task added to project: ${projectName}`, allProjectsData.projects[projectIndex].tasks);
     } else {
         console.error(`Project not found: ${projectName}`);
@@ -270,17 +271,22 @@ function displayProjectTasks(projectName) {
         taskItem.classList.add('taskItem');
 
         const taskTitle = document.createElement('h3');
+        taskTitle.classList.add('taskTitle');
         taskTitle.textContent = task.title;
 
         const taskDescription = document.createElement('p');
         taskDescription.textContent = task.description;
+        taskDescription.classList.add('taskDescription');
 
         const taskDate = document.createElement('p');
         taskDate.textContent = task.date;
+        taskDate.classList.add('taskDate');
 
-        taskItem.appendChild(taskDate);
+
         taskItem.appendChild(taskTitle);
         taskItem.appendChild(taskDescription);
+        taskItem.appendChild(taskDate);
+      
 
         // Create task modifiers and attach them to the task item
         const taskModifiers = createTaskModifiers(task, projectName);
