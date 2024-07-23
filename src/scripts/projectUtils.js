@@ -133,12 +133,16 @@ function handleProjectClick(event) {
     existingTasks.forEach(task => task.remove());
 
     // Check if the 'Add Task' button already exists, only add if not present
-    let existingAddTaskBtn = taskTypes.querySelector('.addTaskBtn');
+    let existingAddTaskBtn = taskTypes.querySelector('.projectTaskBtn');
+    let anotherTaskBtn = taskTypes.querySelector('.addTaskBtn');
     if (!existingAddTaskBtn) {
         taskTypes.appendChild(addTaskBtn(projectName));
-    }
-    
-    
+        if (anotherTaskBtn) {
+            anotherTaskBtn.remove();
+        }
+    } 
+        
+
     // Update the project title in the taskTypes section
     let projectTitle = taskTypes.querySelector('h2');
     if (!projectTitle) {
@@ -161,6 +165,24 @@ function addTaskBtn(category) {
     return addTaskBtn;
 }
 
+function setPriority() {
+    const red = document.createElement('div');
+    const green = document.createElement('div');
+    const yellow = document.createElement('div');
+
+    red.classList.add('redPriority');
+    green.classList.add('greenPriority');
+    yellow.classList.add('yellowPriority');
+
+    const priorities = document.createElement('div');
+    priorities.classList.add('priorities');
+
+    priorities.appendChild(red);
+    priorities.appendChild(green);
+    priorities.appendChild(yellow);
+
+    return priorities;
+}
 
 let modifyingTaskIndex = null; // Track the index of the task being modified
 
