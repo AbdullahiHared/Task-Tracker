@@ -1,7 +1,10 @@
+import { loadProjectsFromLocalStorage, loadTasksFromLocalStorage, saveProjectsToLocalStorage, saveProjectTasksToLocalStorage } from './storage.js';
 import { createButtonElement, createInputElement } from './taskForm.js';
 import { addTaskToArray, removeTaskFromArray, allTasksData } from './taskUtils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    loadProjectsFromLocalStorage(); // Load projects from localStorage
+    loadTasksFromLocalStorage();    // Load tasks from localStorage
     addProjectElements();    // Attaches click listeners to add new projects
     displayProjects();       // Initially display existing projects
 });
@@ -21,6 +24,7 @@ function addProjectToArray(project) {
     } else {
         allProjectsData.projects[existingIndex] = project;
     }
+    saveProjectsToLocalStorage(project);
 }
 
 export function addTaskToProject(newTask, projectName) {
@@ -35,6 +39,8 @@ export function addTaskToProject(newTask, projectName) {
     } else {
         console.error(`Project not found: ${projectName}`);
     }
+
+    saveProjectTasksToLocalStorage(allProjectsData.projects[projectIndex]);
 }
 
 export function addProjectElements() {
